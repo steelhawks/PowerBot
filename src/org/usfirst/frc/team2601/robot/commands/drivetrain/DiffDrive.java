@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2601.robot.commands;
+package org.usfirst.frc.team2601.robot.commands.drivetrain;
 
 import org.usfirst.frc.team2601.robot.Constants;
 import org.usfirst.frc.team2601.robot.Robot;
@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ControlNIDEC extends Command {
+public class DiffDrive extends Command {
 
 	Constants constants = Constants.getInstance();
 	
-    public ControlNIDEC() {
+    public DiffDrive() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.nidec);
+    	requires(Robot.drivetrain);
     }
 
     // Called just before this Command runs the first time
@@ -24,7 +24,7 @@ public class ControlNIDEC extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.nidec.controlNidec(constants.dJS);
+    	Robot.drivetrain.arcadeDrive(constants.dJS);
     }
 
     // Make this return true when this Command no longer needs to run execute()

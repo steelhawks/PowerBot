@@ -11,7 +11,8 @@ public class Constants {
 		}
 		return instance;
 	}
-	
+	//ROBOT POSITION
+	public final static int robotPos = 1;
 	//Left Motor Ports
 	public final static int frontLeftMPort = 0;
 	public final static int midLeftMPort = 1;
@@ -24,12 +25,29 @@ public class Constants {
 	public static Joystick dJS; 
 	//Joystick Ports
 	public final static int dJSPort = 0;
+	//Driver Joystick Buttons
+	public final static int shiftB = 1;
 	//Solenoid Ports
 	public final static int shiftSolPortOn = 0;
 	public final static int shiftSolPortOff = 1;
-	//NIDEC Motor Ports
+	//NIDEC Brushless Motor Ports
 	public final static int brushlessPWMPort = 0;
 	public final static int brushlessDIOPort = 0;
+	//Encoder Ports
+	public final static int leftEncPortA = 1;
+	public final static int leftEncPortB = 2;
+	public final static int rightEncPortA = 3;
+	public final static int rightEncPortB = 4;
+	//Ultrasonic Ports
+	public final static int ultraPortIn = 5;
+	public final static int ultraPortOut = 6;
+	//Booleans
+	public static boolean ultraBool;
+	public static boolean rotateToAngle;
+	//Tolerances
+	public final static int ultraTolerance = 1;
+	
+	public static int autonTurnSpeed;
 	public Constants(){
 	
 	}

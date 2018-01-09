@@ -1,21 +1,16 @@
 package org.usfirst.frc.team2601.robot.commands;
 
-import org.usfirst.frc.team2601.robot.Constants;
-import org.usfirst.frc.team2601.robot.Robot;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class DiffDrive extends Command {
+public class AutonWait extends Command {
 
-	Constants constants = Constants.getInstance();
-	
-    public DiffDrive() {
+    public AutonWait(double timeout) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.drivetrain);
+    	setTimeout(timeout);
     }
 
     // Called just before this Command runs the first time
@@ -24,12 +19,11 @@ public class DiffDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.drivetrain.arcadeDrive(constants.dJS);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true

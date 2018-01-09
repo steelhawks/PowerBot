@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team2601.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -14,8 +16,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team2601.robot.commands.DiffDrive;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.TestAuton;
+import org.usfirst.frc.team2601.robot.commands.drivetrain.DiffDrive;
 import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team2601.robot.subsystems.NIDECSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,9 +29,13 @@ import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
  * project.
  */
 
-public class Robot extends IterativeRobot { //TimedRobot
+public class Robot extends TimedRobot { //TimedRobot
+	
+	Constants constants = Constants.getInstance();
+	
 	public static final Drivetrain drivetrain = new Drivetrain();
 	public static OI m_oi = new OI();
+	public static NIDECSubsystem nidec = new NIDECSubsystem();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -73,6 +81,26 @@ public class Robot extends IterativeRobot { //TimedRobot
 	public void autonomousInit() {
 		m_autonomousCommand = m_chooser.getSelected();
 
+		String gameData;
+		Alliance currAlliance;
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		currAlliance = DriverStation.getInstance().getAlliance();
+		//All game data is from the perspective of red alliance
+		if(currAlliance.equals(Alliance.Red) && constants.robotPos == 1) {	
+			if(gameData.charAt(0) == 'L') {//Red L
+				m_autonomousCommand = new TestAuton();
+				System.out.println("LeftRedAutonPos1");
+			}else if(gameData.charAt(0) == 'R') {//Red is Right
+				System.out.println("RightRedAutonPos1");
+			}
+		}else if(currAlliance.equals(Alliance.Blue) && constants.robotPos == 1) {
+			if(gameData.charAt(0) == 'L') {//Red L
+				System.out.println("LeftBlueAutonPos1");
+			}else if(gameData.charAt(0) == 'R') {//Red is Right
+				System.out.println("RightBlueAutonPos1");
+			}
+		}
+		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
