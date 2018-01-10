@@ -23,16 +23,33 @@ public class Constants {
 	public final static int backRightMPort = 5;
 	//Joystick Objects
 	public static Joystick dJS; 
+	public static Joystick oBB;
 	//Joystick Ports
 	public final static int dJSPort = 0;
+	public final static int oBBPort = 1;
 	//Driver Joystick Buttons
 	public final static int shiftB = 1;
+	//Operator Button Board Buttons
+	public final static int wormDriveB = 4;
+	public final static int elevatorB = 6;
+	public final static int scalerB = 5;
 	//Solenoid Ports
 	public final static int shiftSolPortOn = 0;
 	public final static int shiftSolPortOff = 1;
+	public final static int armSolPortOn = 2;
+	public final static int armSolPortOff = 3;
 	//NIDEC Brushless Motor Ports
 	public final static int brushlessPWMPort = 0;
 	public final static int brushlessDIOPort = 0;
+	//Arm Motor Ports
+	public final static int leftArmMPort = 6;
+	public final static int rightArmMPort = 7;
+	//Elevator Motor Ports
+	public final static int wormDriveMPort = 8;
+	public final static int elevatorMPort = 9;
+	//Scaler Motor Ports
+	public final static int scalerM1Port = 10;
+	public final static int scalerM2Port = 11;
 	//Encoder Ports
 	public final static int leftEncPortA = 1;
 	public final static int leftEncPortB = 2;
@@ -48,7 +65,8 @@ public class Constants {
 	public final static int ultraTolerance = 1;
 	
 	public static int autonTurnSpeed;
+	public static boolean gyroTurnBool;
 	public Constants(){
-	
+		
 	}
 }

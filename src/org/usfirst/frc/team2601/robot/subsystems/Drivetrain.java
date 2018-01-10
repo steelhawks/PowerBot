@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.NidecBrushless;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -25,48 +27,42 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class Drivetrain extends Subsystem {
+public class Drivetrain extends Subsystem implements PIDOutput {
 	
-	Constants constants = Constants.getInstance();
+	static Constants constants = Constants.getInstance();
 	
 	//Left Talons
-	WPI_TalonSRX frontLeftM = new WPI_TalonSRX(constants.frontLeftMPort);
-	WPI_TalonSRX midLeftM = new WPI_TalonSRX(constants.midLeftMPort);
-	WPI_TalonSRX backLeftM = new WPI_TalonSRX(constants.backLeftMPort);
+	public WPI_TalonSRX frontLeftM = new WPI_TalonSRX(constants.frontLeftMPort);
+	public WPI_TalonSRX midLeftM = new WPI_TalonSRX(constants.midLeftMPort);
+	public WPI_TalonSRX backLeftM = new WPI_TalonSRX(constants.backLeftMPort);
 	//Right Talons
-	WPI_TalonSRX frontRightM = new WPI_TalonSRX(constants.frontRightMPort);
-	WPI_TalonSRX midRightM = new WPI_TalonSRX(constants.midRightMPort);
-	WPI_TalonSRX backRightM = new WPI_TalonSRX(constants.backRightMPort);
+	public WPI_TalonSRX frontRightM = new WPI_TalonSRX(constants.frontRightMPort);
+	public WPI_TalonSRX midRightM = new WPI_TalonSRX(constants.midRightMPort);
+	public WPI_TalonSRX backRightM = new WPI_TalonSRX(constants.backRightMPort);
 	//Speed Controller Group
-	SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeftM, midLeftM, backLeftM);
-	SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRightM, midRightM, backRightM);
+	public SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeftM, midLeftM, backLeftM);
+	public SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRightM, midRightM, backRightM);
 	//Drivetrain Type (Tank)
-	DifferentialDrive diffDrive = new DifferentialDrive(leftGroup, rightGroup);
+	public DifferentialDrive diffDrive = new DifferentialDrive(leftGroup, rightGroup);
 	//Solenoid
-	DoubleSolenoid shiftSol = new DoubleSolenoid(constants.shiftSolPortOn, constants.shiftSolPortOff);//Shifting
+	public DoubleSolenoid shiftSol = new DoubleSolenoid(constants.shiftSolPortOn, constants.shiftSolPortOff);//Shifting
 	//SENSORS
 	//Encoders
 	public Encoder leftEnc = new Encoder(constants.leftEncPortA, constants.leftEncPortB, false, EncodingType.k4X);
-	double leftEncDist;
-	double leftEncVal;
 	
 	public Encoder rightEnc = new Encoder(constants.rightEncPortA, constants.rightEncPortB, false, EncodingType.k4X);
-	double rightEncDist;
-	double rightEncVal;
 	//Gyro
-	public AHRS gyro = new AHRS(SPI.Port.kMXP);
-	double gyroRate;
-	double gyroAngle;
+	public static AHRS gyro = new AHRS(SPI.Port.kMXP);
 	double kPGyro = 0.25;
 	//Ultrasonic
 	public AnalogInput ultraA = new AnalogInput(1);
 	public Ultrasonic ultra = new Ultrasonic(constants.ultraPortIn, constants.ultraPortOut);
 	double ultraValue;
 	//PID Controllers
-	PIDController turnController;
+	PIDController pid;
 	double rotateToAngleRate;
 	
-	static final double kP = 0.03;
+	static final double kP = 0.00;
 	static final double kI = 0.00;
 	static final double kD = 0.00;
 	static final double kF = 0.00;
@@ -84,11 +80,13 @@ public class Drivetrain extends Subsystem {
 		gyro.reset();
 		gyro.zeroYaw();
 		
-		turnController = new PIDController(kP,kI,kD,kF,gyro,(PIDOutput) this);
-		turnController.setInputRange(-180.0f, 180.0f);
-		turnController.setOutputRange(-1.0, 1.0);
-		turnController.setAbsoluteTolerance(kToleranceDegrees);
-		turnController.setContinuous(true);
+		pid = new PIDController(kP,kI,kD,kF,gyro, this);
+		pid.disable();
+		pid.setInputRange(-180.0f, 180.0f);
+		pid.setOutputRange(-0.5f, 0.5f);
+		pid.setAbsoluteTolerance(kToleranceDegrees);
+		pid.setContinuous(true);
+
 	}
     public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -99,28 +97,17 @@ public class Drivetrain extends Subsystem {
     	double x = js.getY();
     	double rotate = js.getTwist(); 
     	diffDrive.arcadeDrive(x, rotate); 
-   
-    	gyroAngle = gyro.getAngle();
-		SmartDashboard.putNumber("GyroAngle", gyroAngle);
+    	
+		SmartDashboard.putNumber("GyroAngle", getGyroAngle());
 		SmartDashboard.putNumber("GetBoardAxis", gyro.getBoardYawAxis().board_axis.getValue());
 		
-		SmartDashboard.putNumber("Ultra Distance", ultraA.getVoltage()/.009766);
-		
-		ultraValue = ultra.getRangeInches();
-		SmartDashboard.putNumber("Vex Distance", ultraValue);
-		// Output Enc values to SD
-		leftEncVal = leftEnc.getRate();
-		SmartDashboard.putNumber("LeftEncValue", leftEncVal);
-
-		leftEncDist = leftEnc.getDistance();
-		SmartDashboard.putNumber("LeftEncDist", leftEncDist);
-
-		rightEncVal = rightEnc.getRate();
-		SmartDashboard.putNumber("RightEncValue", rightEncVal);
-
-		rightEncDist = rightEnc.getDistance();
-		SmartDashboard.putNumber("RightEncDist", rightEncDist);
-
+		SmartDashboard.putNumber("Ultra Distance", getAnalogUltraDistance());
+		SmartDashboard.putNumber("Vex Distance", getUltraDistanceInches());
+		// Output Encoder values to SD
+		SmartDashboard.putNumber("LeftEncValue", getLeftEncoderRate());
+		SmartDashboard.putNumber("LeftEncDist", getLeftEncoderDist());
+		SmartDashboard.putNumber("RightEncValue", getRightEncoderRate());
+		SmartDashboard.putNumber("RightEncDist", getRightEncoderDist());
     }
     //Method for Shifting
     public void shiftGears() {
@@ -131,8 +118,8 @@ public class Drivetrain extends Subsystem {
     	}
     }
     public void ultraGyroForward(double dist, double speed, boolean forward) {
-    	gyroAngle = gyro.getAngle();
-		double ultraDist = ultra.getRangeInches();
+    	double gyroAngle = getGyroAngle();
+		double ultraDist = getUltraDistanceInches();
 		if(forward == true) {
 			diffDrive.tankDrive(speed, gyroAngle * kPGyro);
 		}else {
@@ -146,21 +133,40 @@ public class Drivetrain extends Subsystem {
 			constants.ultraBool = false;
 		}
     }
-    public void turn(double degreeSetpoint) {//0.0f set constants.rotateToAngle == true in the command init()
-    	turnController.setSetpoint(degreeSetpoint);
-    	double currentRotationRate;
-    	if(constants.rotateToAngle) {
-    		turnController.enable();
-    		currentRotationRate = constants.autonTurnSpeed;//speed at which the robot turns
-    		constants.rotateToAngle = false;
-    	}else {
-    		turnController.disable();
-    		currentRotationRate = constants.autonTurnSpeed;
-    		constants.rotateToAngle = false;
-    	}
-    	
+    
+    public void turn(double target, boolean left){ 
+    	double gyroAngle = getGyroAngle();
+	    if(left == true) {	
+    		if(gyroAngle <= -target) {
+    			leftGroup.set(0);
+    			rightGroup.set(0);
+    			constants.gyroTurnBool = true;
+	    	}else if(gyroAngle <= -target+20){
+	    		leftGroup.set(-0.25);
+    			rightGroup.set(-0.25);
+    			constants.gyroTurnBool = false;
+	    	}else {
+	    		leftGroup.set(-1.0);
+    			rightGroup.set(-1.0);
+    			constants.gyroTurnBool = false;
+	    	}
+	    }else {
+	    	if(gyroAngle >= target) {
+	    		leftGroup.set(0);
+	    		rightGroup.set(0);
+	    		constants.gyroTurnBool = true;
+	    	}else if(gyroAngle >= target-20){
+	    		leftGroup.set(0.25);
+    			rightGroup.set(0.25);
+    			constants.gyroTurnBool = false;
+	    	}else {
+	    		leftGroup.set(1.0);
+    			rightGroup.set(1.0);
+    			constants.gyroTurnBool = false;
+	    	}
+	    }
     }
-    public double getUltraDistance(){
+    public double getAnalogUltraDistance(){
     	double raw = ultraA.getVoltage();
     	return (raw/0.009766);//5 is voltage range, 512 is distance range
     }
@@ -170,5 +176,27 @@ public class Drivetrain extends Subsystem {
     }
     public void pidWrite(double output) {
     	rotateToAngleRate = output;
+    }
+    public double getUltraDistanceInches() {
+    	return ultra.getRangeInches();
+    }
+    public double getLeftEncoderRate() {
+    	return leftEnc.getRate();
+    }
+    public double getRightEncoderRate() {
+    	return rightEnc.getRate();
+    }
+    public double getLeftEncoderDist() {
+    	return leftEnc.getDistance();
+    }
+    public double getRightEncoderDist() {
+    	return rightEnc.getDistance();
+    }
+    public double getGyroAngle() {
+    	return gyro.getAngle();
+    }
+    public static void resetGyro() {
+    	gyro.reset();
+    	gyro.zeroYaw();
     }
 }

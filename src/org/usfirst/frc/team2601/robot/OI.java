@@ -8,6 +8,8 @@
 package org.usfirst.frc.team2601.robot;
 
 import org.usfirst.frc.team2601.robot.commands.drivetrain.ShiftGear;
+import org.usfirst.frc.team2601.robot.commands.elevator.ElevatorMotor;
+import org.usfirst.frc.team2601.robot.commands.elevator.WormDrive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -22,10 +24,20 @@ public class OI {
 	public OI() {
 		//Get constants
 		Constants constants = Constants.getInstance();
+		
 		//Instantiate Joysticks
 		constants.dJS = new Joystick(constants.dJSPort);
+		constants.oBB = new Joystick(constants.oBBPort);
+		
 		//Buttons for Driver
 		Button shift = new JoystickButton(constants.dJS, constants.shiftB);
 		shift.whenPressed(new ShiftGear());
+		
+		//Buttons for Operator
+		Button wormDrive = new JoystickButton(constants.oBB, constants.wormDriveB);
+		wormDrive.whenPressed(new WormDrive());
+		
+		Button elevator = new JoystickButton(constants.oBB, constants.elevatorB);
+		elevator.whenPressed(new ElevatorMotor());
 	}
 }

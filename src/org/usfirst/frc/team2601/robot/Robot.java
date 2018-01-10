@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team2601.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -18,8 +19,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.TestAuton;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.DiffDrive;
+import org.usfirst.frc.team2601.robot.subsystems.Arms;
 import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team2601.robot.subsystems.Elevator;
 import org.usfirst.frc.team2601.robot.subsystems.NIDECSubsystem;
+import org.usfirst.frc.team2601.robot.subsystems.Scaler;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,10 +40,12 @@ public class Robot extends TimedRobot { //TimedRobot
 	public static final Drivetrain drivetrain = new Drivetrain();
 	public static OI m_oi = new OI();
 	public static NIDECSubsystem nidec = new NIDECSubsystem();
-
+	public static Arms arms = new Arms();
+	public static Scaler scaler = new Scaler();
+	public static Elevator elevator = new Elevator();
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
-
+	public static Compressor compressor = new Compressor(0);
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -49,6 +55,8 @@ public class Robot extends TimedRobot { //TimedRobot
 		m_chooser.addDefault("Default Auto", new DiffDrive());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		compressor.enabled();
+		compressor.start();
 	}
 
 	/**
@@ -120,6 +128,7 @@ public class Robot extends TimedRobot { //TimedRobot
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		//compressor.start();
 	}
 
 	@Override
@@ -139,6 +148,7 @@ public class Robot extends TimedRobot { //TimedRobot
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		//compressor.start();
 	}
 
 	/**

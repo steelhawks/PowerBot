@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class TestAuton extends CommandGroup {
 
     public TestAuton() {
-    	
+    	//addSequential();
     	addSequential(new UltraForwardGyro(10,0.75,true));
     }
 }
