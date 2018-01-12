@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2601.robot.commands.drivetrain;
 
 import org.usfirst.frc.team2601.robot.Robot;
+import org.usfirst.frc.team2601.robot.subsystems.Subsystems;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -15,7 +16,7 @@ public class AutonTurn extends Command {
 	public AutonTurn() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.drivetrain);
+    	requires(Subsystems.drivetrain);
 	}
 	public void setSetpoint(int setpoint) {
 		this.setpoint = setpoint;
@@ -25,7 +26,7 @@ public class AutonTurn extends Command {
     	
     }
     public void PID() {
-    	error = setpoint - Robot.drivetrain.getGyroAngle();//Error = target - actual
+    	error = setpoint - Subsystems.drivetrain.getGyroAngle();//Error = target - actual
     	this.integral += (error*.02);//Integral is increased by error * time
     	derivative = (error - this.previous_error) / .02;
     	this.rcw = P*error + I*this.integral + D*derivative;
@@ -33,7 +34,7 @@ public class AutonTurn extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	PID();
-    	Robot.drivetrain.diffDrive.arcadeDrive(0, rcw);
+    	Subsystems.drivetrain.diffDrive.arcadeDrive(0, rcw);
     }
 
     // Make this return true when this Command no longer needs to run execute()

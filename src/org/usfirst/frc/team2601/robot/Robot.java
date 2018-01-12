@@ -19,13 +19,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.TestAuton;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.DiffDrive;
-import org.usfirst.frc.team2601.robot.subsystems.Arms;
-import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team2601.robot.subsystems.Elevator;
-import org.usfirst.frc.team2601.robot.subsystems.NIDECSubsystem;
-import org.usfirst.frc.team2601.robot.subsystems.Scaler;
 
+import org.usfirst.frc.team2601.robot.Constants;
 /**
+ * 
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
  * documentation. If you change the name of this class or the package after
@@ -34,18 +31,16 @@ import org.usfirst.frc.team2601.robot.subsystems.Scaler;
  */
 
 public class Robot extends TimedRobot { //TimedRobot
+		
+	public int constants = Constants.backRightMPort;
+
+	public static final OI m_oi = new OI();
 	
-	Constants constants = Constants.getInstance();
-	
-	public static final Drivetrain drivetrain = new Drivetrain();
-	public static OI m_oi = new OI();
-	public static NIDECSubsystem nidec = new NIDECSubsystem();
-	public static Arms arms = new Arms();
-	public static Scaler scaler = new Scaler();
-	public static Elevator elevator = new Elevator();
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+	
 	public static Compressor compressor = new Compressor(0);
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -87,27 +82,24 @@ public class Robot extends TimedRobot { //TimedRobot
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand = m_chooser.getSelected();
 
-		String gameData;
-		Alliance currAlliance;
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		currAlliance = DriverStation.getInstance().getAlliance();
+		
+		String gameData = DriverStation.getInstance().getGameSpecificMessage();
+		Alliance currAlliance = DriverStation.getInstance().getAlliance();
+		
+		AutonGamePosition gamePosition = AutonGamePosition.getInstance( gameData, currAlliance );
+		
 		//All game data is from the perspective of red alliance
-		if(currAlliance.equals(Alliance.Red) && constants.robotPos == 1) {	
-			if(gameData.charAt(0) == 'L') {//Red L
-				m_autonomousCommand = new TestAuton();
-				System.out.println("LeftRedAutonPos1");
-			}else if(gameData.charAt(0) == 'R') {//Red is Right
-				System.out.println("RightRedAutonPos1");
-			}
-		}else if(currAlliance.equals(Alliance.Blue) && constants.robotPos == 1) {
-			if(gameData.charAt(0) == 'L') {//Red L
-				System.out.println("LeftBlueAutonPos1");
-			}else if(gameData.charAt(0) == 'R') {//Red is Right
-				System.out.println("RightBlueAutonPos1");
-			}
+		switch(gamePosition){
+			case LEFT_RED:
+					m_autonomousCommand = new TestAuton();
+			case RIGHT_RED:
+			case LEFT_BLUE:
+			case RIGHT_BLUE:
+				m_autonomousCommand = m_chooser.getSelected();
 		}
+		
+		System.out.println(gamePosition); // "RightBlueAutonPos1
 		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",

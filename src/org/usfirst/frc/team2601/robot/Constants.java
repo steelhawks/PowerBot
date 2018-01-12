@@ -2,7 +2,12 @@ package org.usfirst.frc.team2601.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-public class Constants {
+import org.usfirst.frc.team2601.robot.config.Config;
+
+public final class Constants {
+	
+	public final static Config robotPosition = Config.getInstance();	
+			
     private static Constants instance = null;
 	
 	public static Constants getInstance(){
@@ -11,6 +16,7 @@ public class Constants {
 		}
 		return instance;
 	}
+	
 	//ROBOT POSITION
 	public final static int robotPos = 1;
 	//Left Motor Ports
