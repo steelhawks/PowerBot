@@ -14,7 +14,6 @@ public class DiffDrive extends Command {
 	
     public DiffDrive() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	requires(Robot.drivetrain);
     }
 

@@ -11,7 +11,6 @@ public class ArmPiston extends Command {
 
     public ArmPiston() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	requires(Robot.arms);
     }
 

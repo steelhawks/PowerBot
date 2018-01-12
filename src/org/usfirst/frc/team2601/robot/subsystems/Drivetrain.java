@@ -31,11 +31,11 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	
 	static Constants constants = Constants.getInstance();
 	
-	//Left Talons
+	//Left Motors
 	public WPI_TalonSRX frontLeftM = new WPI_TalonSRX(constants.frontLeftMPort);
 	public WPI_TalonSRX midLeftM = new WPI_TalonSRX(constants.midLeftMPort);
 	public WPI_TalonSRX backLeftM = new WPI_TalonSRX(constants.backLeftMPort);
-	//Right Talons
+	//Right Motors
 	public WPI_TalonSRX frontRightM = new WPI_TalonSRX(constants.frontRightMPort);
 	public WPI_TalonSRX midRightM = new WPI_TalonSRX(constants.midRightMPort);
 	public WPI_TalonSRX backRightM = new WPI_TalonSRX(constants.backRightMPort);
@@ -44,16 +44,14 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	public SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRightM, midRightM, backRightM);
 	//Drivetrain Type (Tank)
 	public DifferentialDrive diffDrive = new DifferentialDrive(leftGroup, rightGroup);
-	//Solenoid
-	public DoubleSolenoid shiftSol = new DoubleSolenoid(constants.shiftSolPortOn, constants.shiftSolPortOff);//Shifting
-	//SENSORS
+	//Solenoids (Shifting)
+	public DoubleSolenoid shiftSol = new DoubleSolenoid(constants.shiftSolPortOn, constants.shiftSolPortOff);
 	//Encoders
 	public Encoder leftEnc = new Encoder(constants.leftEncPortA, constants.leftEncPortB, false, EncodingType.k4X);
-	
 	public Encoder rightEnc = new Encoder(constants.rightEncPortA, constants.rightEncPortB, false, EncodingType.k4X);
 	//Gyro
 	public static AHRS gyro = new AHRS(SPI.Port.kMXP);
-	double kPGyro = 0.25;
+	double kPGyro = constants.kPGyro;
 	//Ultrasonic
 	public AnalogInput ultraA = new AnalogInput(1);
 	public Ultrasonic ultra = new Ultrasonic(constants.ultraPortIn, constants.ultraPortOut);
@@ -68,8 +66,9 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	static final double kF = 0.00;
 	
 	static final double kToleranceDegrees = 2.0f;
+	//Constructor for the subsystem
 	public Drivetrain() {
-		shiftSol.set(DoubleSolenoid.Value.kReverse);//Setting to low gear by default
+		shiftSol.set(DoubleSolenoid.Value.kForward);//Setting to low gear by default
 		//Resetting encoder values
 		leftEnc.reset();
 		rightEnc.reset();
@@ -88,28 +87,28 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 		pid.setContinuous(true);
 
 	}
+	//Set default command for the subsystem
     public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    	setDefaultCommand(new DiffDrive());//Default command for driving
+    	setDefaultCommand(new DiffDrive());
     }
-    //Method for Driving 
+    //Method for driving 
     public void arcadeDrive(Joystick js) {
     	double x = js.getY();
     	double rotate = js.getTwist(); 
     	diffDrive.arcadeDrive(x, rotate); 
-    	
+    	//Output gyro values to SB
 		SmartDashboard.putNumber("GyroAngle", getGyroAngle());
 		SmartDashboard.putNumber("GetBoardAxis", gyro.getBoardYawAxis().board_axis.getValue());
-		
+		//Output ultrasonic values to SB
 		SmartDashboard.putNumber("Ultra Distance", getAnalogUltraDistance());
-		SmartDashboard.putNumber("Vex Distance", getUltraDistanceInches());
-		// Output Encoder values to SD
+		SmartDashboard.putNumber("Vex Ultra Distance", getUltraDistanceInches());
+		// Output encoder values to SB
 		SmartDashboard.putNumber("LeftEncValue", getLeftEncoderRate());
 		SmartDashboard.putNumber("LeftEncDist", getLeftEncoderDist());
 		SmartDashboard.putNumber("RightEncValue", getRightEncoderRate());
 		SmartDashboard.putNumber("RightEncDist", getRightEncoderDist());
     }
-    //Method for Shifting
+    //Method for shifting
     public void shiftGears() {
     	if(shiftSol.get() == DoubleSolenoid.Value.kForward) {
     		shiftSol.set(DoubleSolenoid.Value.kReverse);
@@ -117,7 +116,8 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     		shiftSol.set(DoubleSolenoid.Value.kForward);
     	}
     }
-    public void ultraGyroForward(double dist, double speed, boolean forward) {
+    //Method for moving the robot forward in autonomous
+    public void ultraGyroMoveStraight(double dist, double speed, boolean forward) {
     	double gyroAngle = getGyroAngle();
 		double ultraDist = getUltraDistanceInches();
 		if(forward == true) {
@@ -133,7 +133,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 			constants.ultraBool = false;
 		}
     }
-    
+    //Method for turning the robot in autonomous
     public void turn(double target, boolean left){ 
     	double gyroAngle = getGyroAngle();
 	    if(left == true) {	
@@ -141,13 +141,13 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     			leftGroup.set(0);
     			rightGroup.set(0);
     			constants.gyroTurnBool = true;
-	    	}else if(gyroAngle <= -target+20){
-	    		leftGroup.set(-0.25);
-    			rightGroup.set(-0.25);
+	    	}else if(gyroAngle <= -target+constants.gyroSlowAngle){
+	    		leftGroup.set(-constants.gyroSlowSpeed);
+    			rightGroup.set(-constants.gyroSlowSpeed);
     			constants.gyroTurnBool = false;
 	    	}else {
-	    		leftGroup.set(-1.0);
-    			rightGroup.set(-1.0);
+	    		leftGroup.set(-constants.gyroStartSpeed);
+    			rightGroup.set(-constants.gyroStartSpeed);
     			constants.gyroTurnBool = false;
 	    	}
 	    }else {
@@ -155,13 +155,13 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	    		leftGroup.set(0);
 	    		rightGroup.set(0);
 	    		constants.gyroTurnBool = true;
-	    	}else if(gyroAngle >= target-20){
-	    		leftGroup.set(0.25);
-    			rightGroup.set(0.25);
+	    	}else if(gyroAngle >= target-constants.gyroSlowAngle){
+	    		leftGroup.set(constants.gyroSlowSpeed);
+    			rightGroup.set(constants.gyroSlowSpeed);
     			constants.gyroTurnBool = false;
 	    	}else {
-	    		leftGroup.set(1.0);
-    			rightGroup.set(1.0);
+	    		leftGroup.set(constants.gyroStartSpeed);
+    			rightGroup.set(constants.gyroStartSpeed);
     			constants.gyroTurnBool = false;
 	    	}
 	    }

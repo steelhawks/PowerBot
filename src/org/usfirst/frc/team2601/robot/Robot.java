@@ -10,7 +10,6 @@ package org.usfirst.frc.team2601.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -33,16 +32,16 @@ import org.usfirst.frc.team2601.robot.subsystems.Scaler;
  * project.
  */
 
-public class Robot extends TimedRobot { //TimedRobot
+public class Robot extends TimedRobot { 
 	
 	Constants constants = Constants.getInstance();
 	
 	public static final Drivetrain drivetrain = new Drivetrain();
-	public static OI m_oi = new OI();
 	public static NIDECSubsystem nidec = new NIDECSubsystem();
-	public static Arms arms = new Arms();
-	public static Scaler scaler = new Scaler();
-	public static Elevator elevator = new Elevator();
+	public static final Arms arms = new Arms();
+	public static final Scaler scaler = new Scaler();
+	public static final Elevator elevator = new Elevator();
+	public static OI m_oi = new OI();
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public static Compressor compressor = new Compressor(0);
@@ -93,6 +92,7 @@ public class Robot extends TimedRobot { //TimedRobot
 		Alliance currAlliance;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		currAlliance = DriverStation.getInstance().getAlliance();
+		
 		//All game data is from the perspective of red alliance
 		if(currAlliance.equals(Alliance.Red) && constants.robotPos == 1) {	
 			if(gameData.charAt(0) == 'L') {//Red L

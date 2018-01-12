@@ -7,9 +7,12 @@
 
 package org.usfirst.frc.team2601.robot;
 
+import org.usfirst.frc.team2601.robot.commands.arm.ArmPiston;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.ShiftGear;
 import org.usfirst.frc.team2601.robot.commands.elevator.ElevatorMotor;
 import org.usfirst.frc.team2601.robot.commands.elevator.WormDrive;
+import org.usfirst.frc.team2601.robot.commands.scaler.ScalerButton;
+import org.usfirst.frc.team2601.robot.commands.scaler.ScalerButtonStop;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -34,10 +37,17 @@ public class OI {
 		shift.whenPressed(new ShiftGear());
 		
 		//Buttons for Operator
+		Button armPiston = new JoystickButton(constants.oBB, constants.armPistonB);
+		armPiston.whenPressed(new ArmPiston());
+		
 		Button wormDrive = new JoystickButton(constants.oBB, constants.wormDriveB);
 		wormDrive.whenPressed(new WormDrive());
 		
 		Button elevator = new JoystickButton(constants.oBB, constants.elevatorB);
 		elevator.whenPressed(new ElevatorMotor());
+		
+		Button scaler = new JoystickButton(constants.oBB, constants.scalerB);
+		scaler.whenActive(new ScalerButton());
+		scaler.whenInactive(new ScalerButtonStop());
 	}
 }

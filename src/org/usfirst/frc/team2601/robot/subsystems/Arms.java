@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2601.robot.subsystems;
 
 import org.usfirst.frc.team2601.robot.Constants;
+import org.usfirst.frc.team2601.robot.commands.arm.ArmMotors;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmPiston;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -18,16 +19,18 @@ public class Arms extends Subsystem {
 	WPI_TalonSRX leftArmM = new WPI_TalonSRX(constants.leftArmMPort);
 	WPI_TalonSRX rightArmM = new WPI_TalonSRX(constants.rightArmMPort);
 	//Piston
-	DoubleSolenoid armSol = new DoubleSolenoid(constants.armSolPortOn, constants.armSolPortOff);	
+	DoubleSolenoid armSol = new DoubleSolenoid(constants.armSolPortOn, constants.armSolPortOff);
+	
+	//Set the default command for the subsystem
     public void initDefaultCommand() {
-    	setDefaultCommand(new ArmPiston());
+    	setDefaultCommand(new ArmMotors());
     }     
-    //Set Default Position of Solenoid
+    //Constructor for the subsystem
     public Arms() {
     	armSol.set(DoubleSolenoid.Value.kForward);
     }
     //Method for Using the Motors
-    public void controlArms(Joystick js) {
+    public void armMotors(Joystick js) {
     	double y = js.getY();
     	leftArmM.set(y);
     	rightArmM.set(-y);
@@ -38,7 +41,7 @@ public class Arms extends Subsystem {
     	armSol.set(DoubleSolenoid.Value.kReverse);
     } else {
     	armSol.set(DoubleSolenoid.Value.kForward);
-    }
+    	}
     }
 }
 
