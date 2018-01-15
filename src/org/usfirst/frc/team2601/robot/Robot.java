@@ -54,6 +54,8 @@ public class Robot extends TimedRobot {
 		m_chooser.addDefault("Default Auto", new DiffDrive());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		Robot.drivetrain.leftEnc.reset();
+		Robot.drivetrain.rightEnc.reset();
 		compressor.enabled();
 		compressor.start();
 	}
@@ -102,9 +104,9 @@ public class Robot extends TimedRobot {
 				System.out.println("RightRedAutonPos1");
 			}
 		}else if(currAlliance.equals(Alliance.Blue) && constants.robotPos == 1) {
-			if(gameData.charAt(0) == 'L') {//Red L
+			if(gameData.charAt(0) == 'L') {//Blue L
 				System.out.println("LeftBlueAutonPos1");
-			}else if(gameData.charAt(0) == 'R') {//Red is Right
+			}else if(gameData.charAt(0) == 'R') {//Blue is Right
 				System.out.println("RightBlueAutonPos1");
 			}
 		}

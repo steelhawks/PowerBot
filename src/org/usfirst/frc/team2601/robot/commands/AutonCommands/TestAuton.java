@@ -14,8 +14,8 @@ public class TestAuton extends CommandGroup {
 
     public TestAuton() {
     	
-    	addSequential(new UltraGyroMoveStraight(10,0.75,true));
+    	addSequential(new UltraGyroMoveStraight(50,0.65,true));
     	addSequential(new AutonWait(1.0));
-    	addSequential(new AutonTurn(90, true));
+    	addSequential(new AutonTurn(90, false));
     }
 }

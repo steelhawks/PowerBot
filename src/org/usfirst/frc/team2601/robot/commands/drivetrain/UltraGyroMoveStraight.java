@@ -25,7 +25,7 @@ public class UltraGyroMoveStraight extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	constants.ultraBool = false;
+    	constants.autonBool = false;
     	Robot.drivetrain.gyro.reset();
     	Robot.drivetrain.gyro.zeroYaw();
     }
@@ -37,7 +37,7 @@ public class UltraGyroMoveStraight extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return constants.ultraBool;
+        return constants.autonBool;
     }
 
     // Called once after isFinished returns true

@@ -15,12 +15,12 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Arms extends Subsystem {
 	Constants constants = Constants.getInstance();
-    //Motors 
+	//Motors 
 	WPI_TalonSRX leftArmM = new WPI_TalonSRX(constants.leftArmMPort);
 	WPI_TalonSRX rightArmM = new WPI_TalonSRX(constants.rightArmMPort);
 	//Piston
 	DoubleSolenoid armSol = new DoubleSolenoid(constants.armSolPortOn, constants.armSolPortOff);
-	
+    
 	//Set the default command for the subsystem
     public void initDefaultCommand() {
     	setDefaultCommand(new ArmMotors());
@@ -31,17 +31,21 @@ public class Arms extends Subsystem {
     }
     //Method for Using the Motors
     public void armMotors(Joystick js) {
-    	double y = js.getY();
-    	leftArmM.set(y);
-    	rightArmM.set(-y);
-    }
+        if(constants.autonBot == true) {
+    		double y = js.getY();
+	    	leftArmM.set(y);
+	    	rightArmM.set(-y);
+        }
+	}
     //Method for Using the Pistons
     public void shootPistons() {
-    if(armSol.get() == DoubleSolenoid.Value.kForward) {
-    	armSol.set(DoubleSolenoid.Value.kReverse);
-    } else {
-    	armSol.set(DoubleSolenoid.Value.kForward);
-    	}
-    }
+        if(constants.autonBot == true) {
+	    	if(armSol.get() == DoubleSolenoid.Value.kForward) {
+		    	armSol.set(DoubleSolenoid.Value.kReverse);
+		    } else {
+		    	armSol.set(DoubleSolenoid.Value.kForward);
+		    }
+        }
+	}
 }
 

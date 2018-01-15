@@ -42,8 +42,11 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	//Speed Controller Group
 	public SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeftM, midLeftM, backLeftM);
 	public SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRightM, midRightM, backRightM);
+	public SpeedControllerGroup gyroLeftGroup = new SpeedControllerGroup(frontLeftM, backLeftM);
+	public SpeedControllerGroup gyroRightGroup = new SpeedControllerGroup(frontRightM, backRightM);
 	//Drivetrain Type (Tank)
 	public DifferentialDrive diffDrive = new DifferentialDrive(leftGroup, rightGroup);
+	public DifferentialDrive autonGyroDrive = new DifferentialDrive(gyroLeftGroup, gyroRightGroup);
 	//Solenoids (Shifting)
 	public DoubleSolenoid shiftSol = new DoubleSolenoid(constants.shiftSolPortOn, constants.shiftSolPortOff);
 	//Encoders
@@ -72,6 +75,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 		//Resetting encoder values
 		leftEnc.reset();
 		rightEnc.reset();
+		
 		ultra.setEnabled(true);
 		ultra.setAutomaticMode(true);
 		
@@ -95,7 +99,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     public void arcadeDrive(Joystick js) {
     	double x = js.getY();
     	double rotate = js.getTwist(); 
-    	diffDrive.arcadeDrive(x, rotate); 
+    	diffDrive.arcadeDrive(x, -rotate); //(x, rotate)
     	//Output gyro values to SB
 		SmartDashboard.putNumber("GyroAngle", getGyroAngle());
 		SmartDashboard.putNumber("GetBoardAxis", gyro.getBoardYawAxis().board_axis.getValue());
@@ -116,21 +120,32 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     		shiftSol.set(DoubleSolenoid.Value.kForward);
     	}
     }
+    //Method for moving forward and backward in encoder
+    public void EncGyroMove(double leftDist, double rightDist, boolean forward) {
+		diffDrive.arcadeDrive(-0.75, getGyroAngle()*kP);
+		
+		if (getLeftEncoderDist() > leftDist && -getRightEncoderDist() > rightDist) {
+			constants.autonBool = true;
+		}
+		if (getLeftEncoderDist() <= leftDist && -getRightEncoderDist() <= rightDist) {
+			constants.autonBool = false;
+		}
+	}
     //Method for moving the robot forward in autonomous
     public void ultraGyroMoveStraight(double dist, double speed, boolean forward) {
     	double gyroAngle = getGyroAngle();
 		double ultraDist = getUltraDistanceInches();
 		if(forward == true) {
-			diffDrive.tankDrive(speed, gyroAngle * kPGyro);
-		}else {
-			diffDrive.tankDrive(-speed, gyroAngle * kPGyro);
+			diffDrive.arcadeDrive(-speed, gyroAngle * kPGyro);
+    	
+		}else if(forward == false){
+			diffDrive.arcadeDrive(speed, gyroAngle * kPGyro);
 		}
-	
 		if (ultraDist <= dist + constants.ultraTolerance) {
-			constants.ultraBool = true;
+			constants.autonBool = true;
 		}
 		if (ultraDist > dist + constants.ultraTolerance) {
-			constants.ultraBool = false;
+			constants.autonBool = false;
 		}
     }
     //Method for turning the robot in autonomous
@@ -142,20 +157,6 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     			rightGroup.set(0);
     			constants.gyroTurnBool = true;
 	    	}else if(gyroAngle <= -target+constants.gyroSlowAngle){
-	    		leftGroup.set(-constants.gyroSlowSpeed);
-    			rightGroup.set(-constants.gyroSlowSpeed);
-    			constants.gyroTurnBool = false;
-	    	}else {
-	    		leftGroup.set(-constants.gyroStartSpeed);
-    			rightGroup.set(-constants.gyroStartSpeed);
-    			constants.gyroTurnBool = false;
-	    	}
-	    }else {
-	    	if(gyroAngle >= target) {
-	    		leftGroup.set(0);
-	    		rightGroup.set(0);
-	    		constants.gyroTurnBool = true;
-	    	}else if(gyroAngle >= target-constants.gyroSlowAngle){
 	    		leftGroup.set(constants.gyroSlowSpeed);
     			rightGroup.set(constants.gyroSlowSpeed);
     			constants.gyroTurnBool = false;
@@ -164,7 +165,24 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     			rightGroup.set(constants.gyroStartSpeed);
     			constants.gyroTurnBool = false;
 	    	}
+	    }else {
+	    	if(gyroAngle >= target) {
+	    		leftGroup.set(0);
+	    		rightGroup.set(0);
+	    		constants.gyroTurnBool = true;
+	    	}else if(gyroAngle >= target-constants.gyroSlowAngle){
+	    		leftGroup.set(-constants.gyroSlowSpeed);
+    			rightGroup.set(-constants.gyroSlowSpeed);
+    			constants.gyroTurnBool = false;
+	    	}else {
+	    		leftGroup.set(-constants.gyroStartSpeed);
+    			rightGroup.set(-constants.gyroStartSpeed);
+    			constants.gyroTurnBool = false;
+	    	}
 	    }
+    }
+    public void encGyroPlease(double leftEncDist, double rightEncDist, boolean forward) {
+    	
     }
     public double getAnalogUltraDistance(){
     	double raw = ultraA.getVoltage();

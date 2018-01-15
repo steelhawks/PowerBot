@@ -11,18 +11,21 @@ public class Constants {
 		}
 		return instance;
 	}
+	//Bot Type boolean
+	public final static boolean autonBot = true;
+	
 	//Robot Position
 	public final static int robotPos = 1;
 	
-	//Left Drivetrain Motor Ports
-	public final static int frontLeftMPort = 0;
-	public final static int midLeftMPort = 1;
-	public final static int backLeftMPort = 2;
+	//Left Drivetrain Motor Ports	
+	public final static int frontLeftMPort = 3;//0
+	public final static int midLeftMPort = 4;//1
+	public final static int backLeftMPort = 5;//2
 	
 	//Right Drivetrain Motor Ports
-	public final static int frontRightMPort = 3;
-	public final static int midRightMPort = 4;
-	public final static int backRightMPort = 5;
+	public final static int frontRightMPort = 0;//3
+	public final static int midRightMPort = 1;//4
+	public final static int backRightMPort = 2;//5
 	
 	//Joystick Objects
 	public static Joystick dJS; 
@@ -32,8 +35,8 @@ public class Constants {
 	public final static int dJSPort = 0;
 	public final static int oBBPort = 1;
 	
-	//Driver Joystick Buttons
-	public final static int shiftB = 1;
+	//Driver Joystick Buttons (chuck says it should be 2 :)
+	public final static int shiftB = 1; 
 	
 	//Operator Button Board Buttons
 	public final static int wormDriveB = 4;
@@ -74,16 +77,16 @@ public class Constants {
 	public final static int ultraPortOut = 6;
 	
 	//Booleans
-	public static boolean ultraBool;
+	public static boolean autonBool;
 	
 	//Tolerances
 	public final static int ultraTolerance = 1;
 	
 	//gyro constants
 	public final static double gyroSlowAngle = 20;
-	public final static double gyroSlowSpeed = 0.25;
-	public final static double gyroStartSpeed = 1.0;
-	public final static double kPGyro = 0.25;
+	public final static double gyroSlowSpeed = 0.18;
+	public final static double gyroStartSpeed = 0.45;
+	public final static double kPGyro = 0.08;
 	
 	public static int autonTurnSpeed;
 	public static boolean gyroTurnBool;
