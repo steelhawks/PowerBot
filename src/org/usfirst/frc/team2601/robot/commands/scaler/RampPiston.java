@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2601.robot.commands.arm;
+package org.usfirst.frc.team2601.robot.commands.scaler;
 
 import org.usfirst.frc.team2601.robot.Robot;
 
@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ArmPiston extends Command {
+public class RampPiston extends Command {
 
-    public ArmPiston() {
+    public RampPiston() {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.arms);
+    	requires(Robot.scaler);
     }
 
     // Called just before this Command runs the first time
@@ -20,7 +20,7 @@ public class ArmPiston extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.arms.shootPistons();
+    	Robot.scaler.RampPiston();
     }
 
     // Make this return true when this Command no longer needs to run execute()

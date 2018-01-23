@@ -68,4 +68,3 @@ public class Scaler extends Subsystem {
         	}
     }
 }
-
