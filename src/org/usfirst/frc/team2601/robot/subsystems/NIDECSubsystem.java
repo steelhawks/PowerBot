@@ -28,7 +28,7 @@ public class NIDECSubsystem extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
-    	setDefaultCommand(new ControlNIDEC());
+    	//setDefaultCommand(new ControlNIDEC());
     }
   //Control NIDEC Motor
     public void controlNidec(Joystick js) {

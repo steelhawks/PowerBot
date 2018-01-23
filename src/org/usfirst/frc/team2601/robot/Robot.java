@@ -10,6 +10,7 @@ package org.usfirst.frc.team2601.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -32,7 +33,7 @@ import org.usfirst.frc.team2601.robot.subsystems.Scaler;
  * project.
  */
 
-public class Robot extends TimedRobot { 
+public class Robot extends IterativeRobot { //Originally TimedRobot, but is changed to IterativeRobot to experiment with crashing.
 	
 	Constants constants = Constants.getInstance();
 	
@@ -99,15 +100,15 @@ public class Robot extends TimedRobot {
 		if(currAlliance.equals(Alliance.Red) && constants.robotPos == 1) {	
 			if(gameData.charAt(0) == 'L') {//Red L
 				m_autonomousCommand = new TestAuton();
-				System.out.println("LeftRedAutonPos1");
+				//System.out.println("LeftRedAutonPos1"); Print line commented out to experiment with crashing.
 			}else if(gameData.charAt(0) == 'R') {//Red is Right
-				System.out.println("RightRedAutonPos1");
+				//System.out.println("RightRedAutonPos1"); Print line commented out to experiment with crashing.
 			}
 		}else if(currAlliance.equals(Alliance.Blue) && constants.robotPos == 1) {
 			if(gameData.charAt(0) == 'L') {//Blue L
-				System.out.println("LeftBlueAutonPos1");
+				//System.out.println("LeftBlueAutonPos1"); Print line commented out to experiment with crashing.
 			}else if(gameData.charAt(0) == 'R') {//Blue is Right
-				System.out.println("RightBlueAutonPos1");
+				//System.out.println("RightBlueAutonPos1"); Print line commented out to experiment with crashing.
 			}
 		}
 		

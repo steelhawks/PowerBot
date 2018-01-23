@@ -13,32 +13,39 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Elevator extends Subsystem {
 	Constants constants = Constants.getInstance();
 	//Motors
-	WPI_TalonSRX wormDriveM = new WPI_TalonSRX(constants.wormDriveMPort);
-	WPI_TalonSRX elevatorM = new WPI_TalonSRX(constants.elevatorMPort);
-	
+	WPI_TalonSRX wormDriveM;
+	WPI_TalonSRX elevatorM;
 	//Set the default command for the subsystem
     public void initDefaultCommand() {
 
     }
     //Constructor for the subsystem
     public Elevator() {
+    	if (constants.autonBot == false) {
+	    	wormDriveM = new WPI_TalonSRX(constants.wormDriveMPort);
+	    	elevatorM = new WPI_TalonSRX(constants.elevatorMPort);
+    	}  	
     }
     //Method for using the worm drive
     public void WormDriveButton() {
-    	if (wormDriveM.get() == 0) {
-    		wormDriveM.set(1);
-    	}else {
-    		wormDriveM.set(0);
-    	}
+        if(constants.autonBot == false) {
+	    	if (wormDriveM.get() == 0) {
+	    		wormDriveM.set(1);
+	    	}else {
+	    		wormDriveM.set(0);
+	    	}
+        }
     }
     //Method for using the elevator motor
     public void ElevatorButton() {
-    	if (elevatorM.get() == 0) {
-    		elevatorM.set(1);
-    	}else {
-    		elevatorM.set(0);
-    	}
-    }
+        if(constants.autonBot == false) {
+    		if (elevatorM.get() == 0) {
+	    		elevatorM.set(1);
+	    	}else {
+	    		elevatorM.set(0);
+	    	}
+        }
+     }
 }
 
 

@@ -71,25 +71,30 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	static final double kToleranceDegrees = 2.0f;
 	//Constructor for the subsystem
 	public Drivetrain() {
-		shiftSol.set(DoubleSolenoid.Value.kForward);//Setting to low gear by default
+		frontLeftM.setSafetyEnabled(false);
+		midLeftM.setSafetyEnabled(false);
+		backLeftM.setSafetyEnabled(false);
+		frontRightM.setSafetyEnabled(false);
+		midRightM.setSafetyEnabled(false);
+		backRightM.setSafetyEnabled(false);
+		//Setting to low gear by default
+		shiftSol.set(DoubleSolenoid.Value.kForward);
 		//Resetting encoder values
 		leftEnc.reset();
 		rightEnc.reset();
-		
+		//Ultrasonic
 		ultra.setEnabled(true);
 		ultra.setAutomaticMode(true);
-		
 		//Resetting gyro values
 		gyro.reset();
 		gyro.zeroYaw();
-		
+		//PID 
 		pid = new PIDController(kP,kI,kD,kF,gyro, this);
 		pid.disable();
 		pid.setInputRange(-180.0f, 180.0f);
 		pid.setOutputRange(-0.5f, 0.5f);
 		pid.setAbsoluteTolerance(kToleranceDegrees);
 		pid.setContinuous(true);
-
 	}
 	//Set default command for the subsystem
     public void initDefaultCommand() {
@@ -99,18 +104,25 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     public void arcadeDrive(Joystick js) {
     	double x = js.getY();
     	double rotate = js.getTwist(); 
-    	diffDrive.arcadeDrive(x, -rotate); //(x, rotate)
+    	diffDrive.arcadeDrive(x, -rotate); //WAS (x, rotate)
     	//Output gyro values to SB
 		SmartDashboard.putNumber("GyroAngle", getGyroAngle());
 		SmartDashboard.putNumber("GetBoardAxis", gyro.getBoardYawAxis().board_axis.getValue());
 		//Output ultrasonic values to SB
-		SmartDashboard.putNumber("Ultra Distance", getAnalogUltraDistance());
+		//SmartDashboard.putNumber("Ultra Distance", getAnalogUltraDistance()); Analog Ultrasonic (Maxbotix)
 		SmartDashboard.putNumber("Vex Ultra Distance", getUltraDistanceInches());
-		// Output encoder values to SB
+		//Output encoder values to SB
 		SmartDashboard.putNumber("LeftEncValue", getLeftEncoderRate());
 		SmartDashboard.putNumber("LeftEncDist", getLeftEncoderDist());
 		SmartDashboard.putNumber("RightEncValue", getRightEncoderRate());
 		SmartDashboard.putNumber("RightEncDist", getRightEncoderDist());
+		//Output voltage of drivetrain motors to SB
+		SmartDashboard.putNumber("FrontLeftMVoltage",frontLeftM.getBusVoltage());
+		SmartDashboard.putNumber("MidLeftMVoltage", midLeftM.getBusVoltage());
+		SmartDashboard.putNumber("BackLeftMVoltage", backLeftM.getBusVoltage());
+		SmartDashboard.putNumber("FrontRightMVoltage",frontRightM.getBusVoltage());
+		SmartDashboard.putNumber("MidRightMVoltage", midRightM.getBusVoltage());
+		SmartDashboard.putNumber("BackRightMVoltage", backRightM.getBusVoltage());
     }
     //Method for shifting
     public void shiftGears() {
@@ -121,15 +133,25 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     	}
     }
     //Method for moving forward and backward in encoder
-    public void EncGyroMove(double leftDist, double rightDist, boolean forward) {
-		diffDrive.arcadeDrive(-0.75, getGyroAngle()*kP);
-		
-		if (getLeftEncoderDist() > leftDist && -getRightEncoderDist() > rightDist) {
-			constants.autonBool = true;
-		}
-		if (getLeftEncoderDist() <= leftDist && -getRightEncoderDist() <= rightDist) {
-			constants.autonBool = false;
-		}
+    public void encGyroMove(double leftDist, double rightDist, double speed, boolean forward) {
+    	double gyroAngle = getGyroAngle();
+    	if(forward == true) {
+			diffDrive.arcadeDrive(-speed, gyroAngle * kPGyro);
+			if (-getLeftEncoderDist() > leftDist && getRightEncoderDist() > rightDist) {
+				constants.autonBool = true;
+			}
+			if (-getLeftEncoderDist() <= leftDist && getRightEncoderDist() <= rightDist) {
+				constants.autonBool = false;
+			}
+    	}else if(forward == false){
+			diffDrive.arcadeDrive(speed, gyroAngle * kPGyro);
+			if (getLeftEncoderDist() > leftDist && -getRightEncoderDist() > rightDist) {
+				constants.autonBool = true;
+			}
+			if (getLeftEncoderDist() <= leftDist && -getRightEncoderDist() <= rightDist) {
+				constants.autonBool = false;
+			}
+    	}		
 	}
     //Method for moving the robot forward in autonomous
     public void ultraGyroMoveStraight(double dist, double speed, boolean forward) {
@@ -180,9 +202,6 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     			constants.gyroTurnBool = false;
 	    	}
 	    }
-    }
-    public void encGyroPlease(double leftEncDist, double rightEncDist, boolean forward) {
-    	
     }
     public double getAnalogUltraDistance(){
     	double raw = ultraA.getVoltage();
