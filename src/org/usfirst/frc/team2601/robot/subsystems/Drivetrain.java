@@ -106,23 +106,23 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     	double rotate = js.getTwist(); 
     	diffDrive.arcadeDrive(x, -rotate); //WAS (x, rotate)
     	//Output gyro values to SB
-		SmartDashboard.putNumber("GyroAngle", getGyroAngle());
-		SmartDashboard.putNumber("GetBoardAxis", gyro.getBoardYawAxis().board_axis.getValue());
+		SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
+		SmartDashboard.putNumber("Gyro Axis", gyro.getBoardYawAxis().board_axis.getValue());
 		//Output ultrasonic values to SB
 		//SmartDashboard.putNumber("Ultra Distance", getAnalogUltraDistance()); Analog Ultrasonic (Maxbotix)
-		SmartDashboard.putNumber("Vex Ultra Distance", getUltraDistanceInches());
+		SmartDashboard.putNumber("Vex Ultrasonic Dist", getUltraDistanceInches());
 		//Output encoder values to SB
-		SmartDashboard.putNumber("LeftEncValue", getLeftEncoderRate());
-		SmartDashboard.putNumber("LeftEncDist", getLeftEncoderDist());
-		SmartDashboard.putNumber("RightEncValue", getRightEncoderRate());
-		SmartDashboard.putNumber("RightEncDist", getRightEncoderDist());
+		SmartDashboard.putNumber("Left Encoder Val", getLeftEncoderRate());
+		SmartDashboard.putNumber("Left Encoder Dist", getLeftEncoderDist());
+		SmartDashboard.putNumber("Right Encoder Val", getRightEncoderRate());
+		SmartDashboard.putNumber("Right Encoder Dist", getRightEncoderDist());
 		//Output voltage of drivetrain motors to SB
-		SmartDashboard.putNumber("FrontLeftMVoltage",frontLeftM.getBusVoltage());
-		SmartDashboard.putNumber("MidLeftMVoltage", midLeftM.getBusVoltage());
-		SmartDashboard.putNumber("BackLeftMVoltage", backLeftM.getBusVoltage());
-		SmartDashboard.putNumber("FrontRightMVoltage",frontRightM.getBusVoltage());
-		SmartDashboard.putNumber("MidRightMVoltage", midRightM.getBusVoltage());
-		SmartDashboard.putNumber("BackRightMVoltage", backRightM.getBusVoltage());
+		SmartDashboard.putNumber("FrontLeftM Voltage",frontLeftM.getBusVoltage());
+		SmartDashboard.putNumber("MidLeftM Voltage", midLeftM.getBusVoltage());
+		SmartDashboard.putNumber("BackLeftM Voltage", backLeftM.getBusVoltage());
+		SmartDashboard.putNumber("FrontRightM Voltage",frontRightM.getBusVoltage());
+		SmartDashboard.putNumber("MidRightM Voltage", midRightM.getBusVoltage());
+		SmartDashboard.putNumber("BackRightM Voltage", backRightM.getBusVoltage());
     }
     //Method for shifting
     public void shiftGears() {
@@ -132,7 +132,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     		shiftSol.set(DoubleSolenoid.Value.kForward);
     	}
     }
-    //Method for moving forward and backward in encoder
+    //Method for moving the robot in autonomous using encoder
     public void encGyroMove(double leftDist, double rightDist, double speed, boolean forward) {
     	double gyroAngle = getGyroAngle();
     	if(forward == true) {
@@ -153,7 +153,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 			}
     	}		
 	}
-    //Method for moving the robot forward in autonomous
+    //Method for moving the robot in autonomous using ultrasonic
     public void ultraGyroMoveStraight(double dist, double speed, boolean forward) {
     	double gyroAngle = getGyroAngle();
 		double ultraDist = getUltraDistanceInches();
@@ -170,7 +170,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 			constants.autonBool = false;
 		}
     }
-    //Method for turning the robot in autonomous
+    //Method for turning the robot in autonomous using gyro 
     public void turn(double target, boolean left){ 
     	double gyroAngle = getGyroAngle();
 	    if(left == true) {	
@@ -203,10 +203,11 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	    	}
 	    }
     }
-    public double getAnalogUltraDistance(){
+    //Unused code for the Maxbotix analog ultrasonic 
+    /*public double getAnalogUltraDistance(){
     	double raw = ultraA.getVoltage();
     	return (raw/0.009766);//5 is voltage range, 512 is distance range
-    }
+    }*/
     public void stopMotors() {
     	leftGroup.set(0);
     	rightGroup.set(0);

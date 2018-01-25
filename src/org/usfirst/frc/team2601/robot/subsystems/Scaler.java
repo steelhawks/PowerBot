@@ -19,9 +19,9 @@ public class Scaler extends Subsystem {
 	WPI_TalonSRX scalerM2;
 	SpeedControllerGroup scalerGroup;
 	//Pistons
-	public DoubleSolenoid rampSolA = new DoubleSolenoid(constants.rampSolAPortOn, constants.rampSolAPortOff);
-	public DoubleSolenoid rampSolB = new DoubleSolenoid(constants.rampSolBPortOn, constants.rampSolBPortOff);
-	public DoubleSolenoid rampSolC = new DoubleSolenoid(constants.rampSolCPortOn, constants.rampSolCPortOff);
+	DoubleSolenoid rampSolA = new DoubleSolenoid(constants.rampSolAPortOn, constants.rampSolAPortOff);
+	DoubleSolenoid rampSolB = new DoubleSolenoid(constants.rampSolBPortOn, constants.rampSolBPortOff);
+	DoubleSolenoid rampSolC = new DoubleSolenoid(constants.rampSolCPortOn, constants.rampSolCPortOff);
 	//Set default command for the subsystem
     public void initDefaultCommand() {
     }

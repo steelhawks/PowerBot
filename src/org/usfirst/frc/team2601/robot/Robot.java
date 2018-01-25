@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team2601.robot.commands.AutonCommands.TestAuton;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.LRLRedAuton;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.DiffDrive;
 import org.usfirst.frc.team2601.robot.subsystems.Arms;
 import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
@@ -99,7 +99,7 @@ public class Robot extends IterativeRobot { //Originally TimedRobot, but is chan
 		//All game data is from the perspective of red alliance
 		if(currAlliance.equals(Alliance.Red) && constants.robotPos == 1) {	
 			if(gameData.charAt(0) == 'L') {//Red L
-				m_autonomousCommand = new TestAuton();
+				m_autonomousCommand = new LRLRedAuton();
 				//System.out.println("LeftRedAutonPos1"); Print line commented out to experiment with crashing.
 			}else if(gameData.charAt(0) == 'R') {//Red is Right
 				//System.out.println("RightRedAutonPos1"); Print line commented out to experiment with crashing.

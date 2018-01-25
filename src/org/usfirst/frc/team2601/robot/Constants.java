@@ -86,9 +86,9 @@ public class Constants {
 	//Tolerances
 	public final static int ultraTolerance = 1;
 	
-	//gyro constants
+	//Gyro Constants
 	public final static double gyroSlowAngle = 20;
-	public final static double gyroSlowSpeed = 0.18;
+	public final static double gyroSlowSpeed = 0.2;
 	public final static double gyroStartSpeed = 0.45;
 	public final static double kPGyro = 0.08;
 	
