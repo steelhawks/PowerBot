@@ -7,7 +7,6 @@
 
 package org.usfirst.frc.team2601.robot;
 
-import org.usfirst.frc.team2601.robot.commands.scaler.RampPiston;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.ShiftGear;
 import org.usfirst.frc.team2601.robot.commands.elevator.ElevatorMotor;
 import org.usfirst.frc.team2601.robot.commands.elevator.WormDrive;
@@ -23,25 +22,22 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-		
+	Constants constants = Constants.getInstance();
+	
+	public Joystick djs = new Joystick(constants.dJSPort);
+	
 	public OI() {
 		//Get constants
-		Constants constants = Constants.getInstance();
 		
 		//Instantiate Joysticks
-		constants.dJS = new Joystick(constants.dJSPort);
 		constants.oBB = new Joystick(constants.oBBPort);
 		
 		//Buttons for Driver
-		Button shift = new JoystickButton(constants.dJS, constants.shiftB);
+		Button shift = new JoystickButton(djs, constants.shiftB);
 		shift.whenPressed(new ShiftGear());
 		
 		//Buttons for Operator
-		Button armPiston = new JoystickButton(constants.oBB, constants.rampPistonB);
-		armPiston.whenPressed(new RampPiston());
 		if (constants.autonBot == false) {
-			Button wormDrive = new JoystickButton(constants.oBB, constants.wormDriveB);
-			wormDrive.whenPressed(new WormDrive());
 			
 			Button elevator = new JoystickButton(constants.oBB, constants.elevatorB);
 			elevator.whenPressed(new ElevatorMotor());

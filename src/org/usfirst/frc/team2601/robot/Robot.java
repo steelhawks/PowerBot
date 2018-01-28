@@ -17,7 +17,24 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team2601.robot.commands.AutonCommands.LRLRedAuton;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos1;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos2;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos3;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleRPos1;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleRPos2;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleRPos3;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchLLLPos1;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchLLLPos2;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchLLLPos3;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchLRLPos1;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchLRLPos2;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchLRLPos3;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRLRPos1;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRLRPos2;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRLRPos3;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRRRPos1;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRRRPos2;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRRRPos3;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.DiffDrive;
 import org.usfirst.frc.team2601.robot.subsystems.Arms;
 import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
@@ -33,7 +50,7 @@ import org.usfirst.frc.team2601.robot.subsystems.Scaler;
  * project.
  */
 
-public class Robot extends IterativeRobot { //Originally TimedRobot, but is changed to IterativeRobot to experiment with crashing.
+public class Robot extends TimedRobot { 
 	
 	Constants constants = Constants.getInstance();
 	
@@ -59,6 +76,20 @@ public class Robot extends IterativeRobot { //Originally TimedRobot, but is chan
 		Robot.drivetrain.rightEnc.reset();
 		compressor.enabled();
 		compressor.start();
+		Robot.drivetrain.frontLeftM.setSafetyEnabled(false);
+		Robot.drivetrain.midLeftM.setSafetyEnabled(false);
+		Robot.drivetrain.backLeftM.setSafetyEnabled(false);
+		Robot.drivetrain.frontRightM.setSafetyEnabled(false);
+		Robot.drivetrain.midRightM.setSafetyEnabled(false);
+		Robot.drivetrain.backRightM.setSafetyEnabled(false);
+		
+		Robot.drivetrain.frontLeftM.setExpiration(120);
+		Robot.drivetrain.midLeftM.setExpiration(120);
+		Robot.drivetrain.backLeftM.setExpiration(120);
+		Robot.drivetrain.frontRightM.setExpiration(120);
+		Robot.drivetrain.midRightM.setExpiration(120);
+		Robot.drivetrain.backRightM.setExpiration(120);
+		
 	}
 
 	/**
@@ -96,35 +127,88 @@ public class Robot extends IterativeRobot { //Originally TimedRobot, but is chan
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		currAlliance = DriverStation.getInstance().getAlliance();
 		
-		//All game data is from the perspective of red alliance
-		if(currAlliance.equals(Alliance.Red) && constants.robotPos == 1) {	
-			if(gameData.charAt(0) == 'L') {//Red L
-				m_autonomousCommand = new LRLRedAuton();
-				//System.out.println("LeftRedAutonPos1"); Print line commented out to experiment with crashing.
-			}else if(gameData.charAt(0) == 'R') {//Red is Right
-				//System.out.println("RightRedAutonPos1"); Print line commented out to experiment with crashing.
+		//All positions are the same from the perspectives of both alliances 
+		//Position one double scale autonomous
+		if(constants.robotPos == 1 && constants.doubleScale == true) {	
+			if(gameData.charAt(1) == 'L') {//LLL or RLR
+				m_autonomousCommand = new DoubleScaleLPos1();
+				System.out.println("Left side double scale auton in Pos1");
+			}else if(gameData.charAt(1) == 'R') {//LRL or RRR
+				m_autonomousCommand = new DoubleScaleRPos1();
+				System.out.println("Right side double scale auton in Pos1");
 			}
-		}else if(currAlliance.equals(Alliance.Blue) && constants.robotPos == 1) {
-			if(gameData.charAt(0) == 'L') {//Blue L
-				//System.out.println("LeftBlueAutonPos1"); Print line commented out to experiment with crashing.
-			}else if(gameData.charAt(0) == 'R') {//Blue is Right
-				//System.out.println("RightBlueAutonPos1"); Print line commented out to experiment with crashing.
+		//Position two double scale autonomous
+		}else if(constants.robotPos == 2 && constants.doubleScale == true) {
+			if(gameData.charAt(1) == 'L') {//LLL or RLR
+				m_autonomousCommand = new DoubleScaleLPos2();
+			}else if(gameData.charAt(1) == 'R') {//LRL or RRR
+				m_autonomousCommand = new DoubleScaleRPos2();
+				System.out.println("Right side double scale auton in Pos2");
+			} 
+		//Position three double scale autonomous	
+		}else if(constants.robotPos == 3 && constants.doubleScale == true) {
+			if(gameData.charAt(1) == 'L') {//LLL or RLR
+				m_autonomousCommand = new DoubleScaleLPos3();
+				System.out.println("Left side double scale auton in Pos3");
+			}else if(gameData.charAt(1) == 'R') {//LRL or RRR
+				m_autonomousCommand = new DoubleScaleRPos3();
+				System.out.println("Right side double scale auton in Pos3");	
 			}
+		//Position one scale switch autonomous 
+		}else if(constants.robotPos == 1 && constants.doubleScale == false) {
+			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {//LLL 
+				m_autonomousCommand = new ScaleSwitchLLLPos1();
+				System.out.println("LLL scale switch auton in Pos1");
+			}else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {//LRL
+				m_autonomousCommand = new ScaleSwitchLRLPos1();
+				System.out.println("LRL scale switch auton in Pos1");
+			}else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {//RLR
+				m_autonomousCommand = new ScaleSwitchRLRPos1();
+				System.out.println("RLR scale switch auton in Pos1");
+			}else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {//RRR
+				m_autonomousCommand = new ScaleSwitchRRRPos1();
+				System.out.println("RRR scale switch auton in Pos1");
+			}
+		//Position two scale switch autonomous
+		}else if(constants.robotPos == 2 && constants.doubleScale == false) {
+			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {//LLL 
+				m_autonomousCommand = new ScaleSwitchLLLPos2();
+				System.out.println("LLL scale switch auton in Pos2");
+			}else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {//LRL
+				m_autonomousCommand = new ScaleSwitchLRLPos2();
+				System.out.println("LRL scale switch auton in Pos2");
+			}else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {//RLR
+				m_autonomousCommand = new ScaleSwitchRLRPos2();
+				System.out.println("RLR scale switch auton in Pos2");
+			}else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {//RRR
+				m_autonomousCommand = new ScaleSwitchRRRPos2();
+				System.out.println("RRR scale switch auton in Pos2");
+			}
+		//Position three scale switch autonomous
+		}else if(constants.robotPos == 3 && constants.doubleScale == false) {
+			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {//LLL 
+				m_autonomousCommand = new ScaleSwitchLLLPos3();
+				System.out.println("LLL scale switch auton in Pos3");
+			}else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {//LRL
+				m_autonomousCommand = new ScaleSwitchLRLPos3();
+				System.out.println("LRL scale switch auton in Pos3");
+			}else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {//RLR
+				m_autonomousCommand = new ScaleSwitchRLRPos3();
+				System.out.println("RLR scale switch auton in Pos3");
+			}else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {//RRR
+				m_autonomousCommand = new ScaleSwitchRRRPos3();
+				System.out.println("RRR scale switch auton in Pos3");
+			}
+		}else {
+			//CrossAutoLine
 		}
-		
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
 		// schedule the autonomous command (example)
-		if (m_autonomousCommand != null) {
-			m_autonomousCommand.start();
-		}
+	if (m_autonomousCommand != null) {
+		m_autonomousCommand.start();
 	}
-
+}
+		
+			
 	/**
 	 * This function is called periodically during autonomous.
 	 */
@@ -151,7 +235,6 @@ public class Robot extends IterativeRobot { //Originally TimedRobot, but is chan
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		//compressor.start();
 	}
 
 	/**

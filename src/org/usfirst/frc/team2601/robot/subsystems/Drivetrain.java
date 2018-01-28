@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.NidecBrushless;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -30,7 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Drivetrain extends Subsystem implements PIDOutput {
 	
 	static Constants constants = Constants.getInstance();
-	
+		
 	//Left Motors
 	public WPI_TalonSRX frontLeftM = new WPI_TalonSRX(constants.frontLeftMPort);
 	public WPI_TalonSRX midLeftM = new WPI_TalonSRX(constants.midLeftMPort);
@@ -42,11 +43,8 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	//Speed Controller Group
 	public SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeftM, midLeftM, backLeftM);
 	public SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRightM, midRightM, backRightM);
-	public SpeedControllerGroup gyroLeftGroup = new SpeedControllerGroup(frontLeftM, backLeftM);
-	public SpeedControllerGroup gyroRightGroup = new SpeedControllerGroup(frontRightM, backRightM);
 	//Drivetrain Type (Tank)
 	public DifferentialDrive diffDrive = new DifferentialDrive(leftGroup, rightGroup);
-	public DifferentialDrive autonGyroDrive = new DifferentialDrive(gyroLeftGroup, gyroRightGroup);
 	//Solenoids (Shifting)
 	public DoubleSolenoid shiftSol = new DoubleSolenoid(constants.shiftSolPortOn, constants.shiftSolPortOff);
 	//Encoders
@@ -71,12 +69,6 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	static final double kToleranceDegrees = 2.0f;
 	//Constructor for the subsystem
 	public Drivetrain() {
-		frontLeftM.setSafetyEnabled(false);
-		midLeftM.setSafetyEnabled(false);
-		backLeftM.setSafetyEnabled(false);
-		frontRightM.setSafetyEnabled(false);
-		midRightM.setSafetyEnabled(false);
-		backRightM.setSafetyEnabled(false);
 		//Setting to low gear by default
 		shiftSol.set(DoubleSolenoid.Value.kForward);
 		//Resetting encoder values

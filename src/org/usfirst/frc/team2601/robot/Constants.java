@@ -11,48 +11,50 @@ public class Constants {
 		}
 		return instance;
 	}
-	//Robot Type Boolean (Alpha and Beta = false | Auton and TestBoard = true)
+	//Robot Type Boolean (Alpha and Beta = false | AutonBot and TestBoard = true)
 	public final static boolean autonBot = true;
 	
 	//Robot Position
-	public final static int robotPos = 1;
+	public final static int robotPos = 2;
 	
-	//Left Drivetrain Motor Ports	
-	public final static int frontLeftMPort = 3;//0 originally
-	public final static int midLeftMPort = 4;//1 originally
-	public final static int backLeftMPort = 5;//2 originally
+	//Autonomous Booleans 
+	public final static boolean doubleScale = true;
 	
-	//Right Drivetrain Motor Ports
+	//Left Drivetrain Motor Ports
 	public final static int frontRightMPort = 0;//3 originally
 	public final static int midRightMPort = 1;//4 originally
 	public final static int backRightMPort = 2;//5 originally
 	
+	//Right Drivetrain Motor Ports
+	public final static int frontLeftMPort = 3;//0 originally
+	public final static int midLeftMPort = 4;//1 originally
+	public final static int backLeftMPort = 5;//2 originally
+	
 	//Joystick Objects
-	public static Joystick dJS; 
+	//public static Joystick dJS; 
 	public static Joystick oBB;
 	
 	//Joystick Ports
 	public final static int dJSPort = 0;
 	public final static int oBBPort = 1;
 	
-	//Driver Joystick Buttons
+	//Driver Joystick Button
 	public final static int shiftB = 1; 
 	
 	//Operator Button Board Buttons
-	public final static int wormDriveB = 4;
 	public final static int elevatorB = 6;
 	public final static int scalerB = 5;
-	public final static int rampPistonB = 10;
+	public final static int armMotorsB = 4; 
+	public final static int armPistonsB = 3;
+	public final static int armPushB = 2;
 	
 	//Solenoid Ports
 	public final static int shiftSolPortOn = 0;
 	public final static int shiftSolPortOff = 1;
-	public final static int rampSolAPortOn = 2;
-	public final static int rampSolAPortOff = 3;
-	public final static int rampSolBPortOn = 4;
-	public final static int rampSolBPortOff = 5;
-	public final static int rampSolCPortOn = 6;
-	public final static int rampSolCPortOff = 7;
+	public final static int armSolPortOn = 2;
+	public final static int armSolPortOff = 3;
+	public final static int pushArmSolPortOn = 4;
+	public final static int pushArmSolPortOff = 5;
 	
 	//NIDEC Brushless Motor Ports
 	public final static int brushlessPWMPort = 0;
@@ -63,12 +65,11 @@ public class Constants {
 	public final static int rightArmMPort = 7;
 	
 	//Elevator Motor Ports
-	public final static int wormDriveMPort = 8;
-	public final static int elevatorMPort = 9;
+	public final static int elevatorMPort = 8;
 	
 	//Scaler Motor Ports
-	public final static int scalerM1Port = 10;
-	public final static int scalerM2Port = 11;
+	public final static int scalerM1Port = 9;
+	public final static int scalerM2Port = 10;
 	
 	//Encoder Ports
 	public final static int leftEncPortA = 1;
@@ -88,7 +89,7 @@ public class Constants {
 	
 	//Gyro Constants
 	public final static double gyroSlowAngle = 20;
-	public final static double gyroSlowSpeed = 0.2;
+	public static double gyroSlowSpeed = 0.2;
 	public final static double gyroStartSpeed = 0.45;
 	public final static double kPGyro = 0.08;
 	

@@ -22,7 +22,6 @@ public class Elevator extends Subsystem {
     //Constructor for the subsystem
     public Elevator() {
     	if (constants.autonBot == false) {
-	    	wormDriveM = new WPI_TalonSRX(constants.wormDriveMPort);
 	    	elevatorM = new WPI_TalonSRX(constants.elevatorMPort);
     	}  	
     }

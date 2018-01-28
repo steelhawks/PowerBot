@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2601.robot.commands.drivetrain;
 
 import org.usfirst.frc.team2601.robot.Constants;
+import org.usfirst.frc.team2601.robot.OI;
 import org.usfirst.frc.team2601.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -9,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class DiffDrive extends Command {
-
+	OI oi = new OI();
 	Constants constants = Constants.getInstance();
 	
     public DiffDrive() {
@@ -23,7 +24,7 @@ public class DiffDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.drivetrain.arcadeDrive(constants.dJS);
+    	Robot.drivetrain.arcadeDrive(oi.djs);
     }
 
     // Make this return true when this Command no longer needs to run execute()
