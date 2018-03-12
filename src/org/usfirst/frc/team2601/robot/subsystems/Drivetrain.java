@@ -1,7 +1,7 @@
 package org.usfirst.frc.team2601.robot.subsystems;
 
 import org.usfirst.frc.team2601.robot.Constants;
-import org.usfirst.frc.team2601.robot.commands.ControlNIDEC;
+import org.usfirst.frc.team2601.robot.Robot;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.DiffDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -35,14 +35,14 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	//Left Motors
 	public WPI_TalonSRX frontLeftM = new WPI_TalonSRX(constants.frontLeftMPort);
 	public WPI_TalonSRX midLeftM = new WPI_TalonSRX(constants.midLeftMPort);
-	public WPI_TalonSRX backLeftM = new WPI_TalonSRX(constants.backLeftMPort);
+	//public WPI_TalonSRX backLeftM = new WPI_TalonSRX(constants.backLeftMPort);
 	//Right Motors
 	public WPI_TalonSRX frontRightM = new WPI_TalonSRX(constants.frontRightMPort);
 	public WPI_TalonSRX midRightM = new WPI_TalonSRX(constants.midRightMPort);
-	public WPI_TalonSRX backRightM = new WPI_TalonSRX(constants.backRightMPort);
+	//public WPI_TalonSRX backRightM = new WPI_TalonSRX(constants.backRightMPort);
 	//Speed Controller Group
-	public SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeftM, midLeftM, backLeftM);
-	public SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRightM, midRightM, backRightM);
+	public SpeedControllerGroup leftGroup = new SpeedControllerGroup(frontLeftM, midLeftM);//0,1
+	public SpeedControllerGroup rightGroup = new SpeedControllerGroup(frontRightM, midRightM);//3,4
 	//Drivetrain Type (Tank)
 	public DifferentialDrive diffDrive = new DifferentialDrive(leftGroup, rightGroup);
 	//Solenoids (Shifting)
@@ -55,7 +55,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	double kPGyro = constants.kPGyro;
 	//Ultrasonic
 	public AnalogInput ultraA = new AnalogInput(1);
-	public Ultrasonic ultra = new Ultrasonic(constants.ultraPortIn, constants.ultraPortOut);
+	//public Ultrasonic ultra = new Ultrasonic(constants.ultraPortIn, constants.ultraPortOut);
 	double ultraValue;
 	//PID Controllers
 	PIDController pid;
@@ -69,14 +69,14 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	static final double kToleranceDegrees = 2.0f;
 	//Constructor for the subsystem
 	public Drivetrain() {
-		//Setting to low gear by default
-		shiftSol.set(DoubleSolenoid.Value.kForward);
+		//Setting to HIGH gear by default
+		shiftSol.set(DoubleSolenoid.Value.kReverse);
 		//Resetting encoder values
 		leftEnc.reset();
 		rightEnc.reset();
 		//Ultrasonic
-		ultra.setEnabled(true);
-		ultra.setAutomaticMode(true);
+		//ultra.setEnabled(true);
+		//ultra.setAutomaticMode(true);
 		//Resetting gyro values
 		gyro.reset();
 		gyro.zeroYaw();
@@ -94,9 +94,10 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     }
     //Method for driving 
     public void arcadeDrive(Joystick js) {
-    	double x = js.getY();
+    	double y = js.getY();
     	double rotate = js.getTwist(); 
-    	diffDrive.arcadeDrive(x, -rotate); //WAS (x, rotate)
+    	diffDrive.arcadeDrive(y, -rotate); //WAS (x, rotate)
+    	
     	//Output gyro values to SB
 		SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
 		SmartDashboard.putNumber("Gyro Axis", gyro.getBoardYawAxis().board_axis.getValue());
@@ -111,10 +112,11 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 		//Output voltage of drivetrain motors to SB
 		SmartDashboard.putNumber("FrontLeftM Voltage",frontLeftM.getBusVoltage());
 		SmartDashboard.putNumber("MidLeftM Voltage", midLeftM.getBusVoltage());
-		SmartDashboard.putNumber("BackLeftM Voltage", backLeftM.getBusVoltage());
+		//SmartDashboard.putNumber("BackLeftM Voltage", backLeftM.getBusVoltage());
 		SmartDashboard.putNumber("FrontRightM Voltage",frontRightM.getBusVoltage());
 		SmartDashboard.putNumber("MidRightM Voltage", midRightM.getBusVoltage());
-		SmartDashboard.putNumber("BackRightM Voltage", backRightM.getBusVoltage());
+		SmartDashboard.putNumber("IRValue", Robot.arms.cubeir.getValue());
+		//SmartDashboard.putNumber("BackRightM Voltage", backRightM.getBusVoltage());
     }
     //Method for shifting
     public void shiftGears() {
@@ -135,14 +137,15 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 			if (-getLeftEncoderDist() <= leftDist && getRightEncoderDist() <= rightDist) {
 				constants.autonBool = false;
 			}
-    	}else if(forward == false){
+    	}
+    	if(forward == false){
 			diffDrive.arcadeDrive(speed, gyroAngle * kPGyro);
 			if (getLeftEncoderDist() > leftDist && -getRightEncoderDist() > rightDist) {
 				constants.autonBool = true;
 			}
 			if (getLeftEncoderDist() <= leftDist && -getRightEncoderDist() <= rightDist) {
 				constants.autonBool = false;
-			}
+			}	
     	}		
 	}
     //Method for moving the robot in autonomous using ultrasonic
@@ -208,7 +211,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     	rotateToAngleRate = output;
     }
     public double getUltraDistanceInches() {
-    	return ultra.getRangeInches();
+    	return 2;//ultra.getRangeInches();
     }
     public double getLeftEncoderRate() {
     	return leftEnc.getRate();

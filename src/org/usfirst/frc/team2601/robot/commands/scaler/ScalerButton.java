@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
+//UNUSED COMMAND BECAUSE SCALER IS NOT USED
 public class ScalerButton extends Command {
 
     public ScalerButton() {
-        // Use requires() here to declare subsystem dependencies
-        requires(Robot.scaler);
+        //requires(Robot.scaler);
     }
 
     // Called just before this Command runs the first time
@@ -20,7 +20,7 @@ public class ScalerButton extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.scaler.ScalerButton();
+    	//Robot.scaler.ScalerButton();
     }
 
     // Make this return true when this Command no longer needs to run execute()

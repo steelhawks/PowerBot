@@ -1,6 +1,6 @@
-package org.usfirst.frc.team2601.robot.commands;
+package org.usfirst.frc.team2601.robot.commands.ArmPivot;
 
-import org.usfirst.frc.team2601.robot.Constants;
+import org.usfirst.frc.team2601.robot.OI;
 import org.usfirst.frc.team2601.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ControlNIDEC extends Command {
+public class PivotJS extends Command {
 
-	Constants constants = Constants.getInstance();
+	public OI oi = new OI();
 	
-    public ControlNIDEC() {
+    public PivotJS() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.nidec);
+    	requires(Robot.pivot);
     }
 
     // Called just before this Command runs the first time
@@ -24,7 +24,7 @@ public class ControlNIDEC extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Robot.nidec.controlNidec();
+    	Robot.pivot.armPivotJS(oi.pivotJS);
     }
 
     // Make this return true when this Command no longer needs to run execute()

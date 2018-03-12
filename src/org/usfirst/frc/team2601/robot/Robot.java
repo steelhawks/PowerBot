@@ -7,6 +7,10 @@
 
 package org.usfirst.frc.team2601.robot;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -17,6 +21,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos1;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos2;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos3;
@@ -36,10 +42,10 @@ import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRRRPos1;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRRRPos2;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRRRPos3;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.DiffDrive;
+import org.usfirst.frc.team2601.robot.subsystems.ArmPivot;
 import org.usfirst.frc.team2601.robot.subsystems.Arms;
 import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2601.robot.subsystems.Elevator;
-import org.usfirst.frc.team2601.robot.subsystems.NIDECSubsystem;
 import org.usfirst.frc.team2601.robot.subsystems.Scaler;
 
 /**
@@ -55,20 +61,42 @@ public class Robot extends TimedRobot {
 	Constants constants = Constants.getInstance();
 	
 	public static final Drivetrain drivetrain = new Drivetrain();
-	public static NIDECSubsystem nidec = new NIDECSubsystem();
-	public static final Arms arms = new Arms();
+	public static final Arms arms =
+			new Arms();
 	public static final Scaler scaler = new Scaler();
 	public static final Elevator elevator = new Elevator();
+	public static final ArmPivot pivot = new ArmPivot();
 	public static OI m_oi = new OI();
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public static Compressor compressor = new Compressor(0);
+	Thread visionThread;
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setResolution(640, 480);
+		
+		/*new Thread(() -> {
+			UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+			camera.setResolution(640, 480);
+			
+			CvSink cvSink = CameraServer.getInstance().getVideo();
+			CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+			
+			Mat source = new Mat();
+			Mat output = new Mat();
+			
+			while(!Thread.interrupted()) {
+				cvSink.grabFrame(source);
+				//Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+				outputStream.putFrame(output);
+			}
+		}).start();		*/
 		m_chooser.addDefault("Default Auto", new DiffDrive());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
@@ -78,17 +106,17 @@ public class Robot extends TimedRobot {
 		compressor.start();
 		Robot.drivetrain.frontLeftM.setSafetyEnabled(false);
 		Robot.drivetrain.midLeftM.setSafetyEnabled(false);
-		Robot.drivetrain.backLeftM.setSafetyEnabled(false);
+		//Robot.drivetrain.backLeftM.setSafetyEnabled(false);
 		Robot.drivetrain.frontRightM.setSafetyEnabled(false);
 		Robot.drivetrain.midRightM.setSafetyEnabled(false);
-		Robot.drivetrain.backRightM.setSafetyEnabled(false);
+		//Robot.drivetrain.backRightM.setSafetyEnabled(false);
 		
 		Robot.drivetrain.frontLeftM.setExpiration(120);
 		Robot.drivetrain.midLeftM.setExpiration(120);
-		Robot.drivetrain.backLeftM.setExpiration(120);
+		//Robot.drivetrain.backLeftM.setExpiration(120);
 		Robot.drivetrain.frontRightM.setExpiration(120);
 		Robot.drivetrain.midRightM.setExpiration(120);
-		Robot.drivetrain.backRightM.setExpiration(120);
+		//Robot.drivetrain.backRightM.setExpiration(120);
 		
 	}
 

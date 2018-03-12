@@ -14,23 +14,28 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Scaler extends Subsystem {
 	Constants constants = Constants.getInstance();
+	//ENTIRE SUBSYSTEM COMMENTED OUT BECAUSE IT IS NOT USED 
+	/*
 	//Motors
 	WPI_TalonSRX scalerM1;
 	WPI_TalonSRX scalerM2;
-	SpeedControllerGroup scalerGroup;
+	SpeedControllerGroup scalerGroup;*/
 	//Set default command for the subsystem
     public void initDefaultCommand() {
     }
     //Constructor for the subsystem
-    public Scaler() { 
-    	if (constants.autonBot == false) {
+    public Scaler() {
+    	
+    }
+}
+    	/*if (constants.autonBot == false) {
     		scalerM1 = new WPI_TalonSRX(constants.scalerM1Port);
     		scalerM2 = new WPI_TalonSRX(constants.scalerM2Port);
     		scalerGroup = new SpeedControllerGroup(scalerM1, scalerM2);
     	}
-    }
+    } 
     //Method for activating the scaler
-    public void ScalerButton () {
+    /*public void ScalerButton () {
         if(constants.autonBot == false) {
     		if (scalerGroup.get() == 0) {
 	    		Robot.compressor.stop();
@@ -48,4 +53,4 @@ public class Scaler extends Subsystem {
     		scalerGroup.set(0);
         }
     }
-}
+}*/

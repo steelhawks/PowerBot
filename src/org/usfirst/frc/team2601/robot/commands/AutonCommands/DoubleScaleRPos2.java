@@ -15,11 +15,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class DoubleScaleRPos2 extends CommandGroup {
 
     public DoubleScaleRPos2() {
-    	if(Robot.drivetrain.shiftSol.get() == DoubleSolenoid.Value.kForward){
-    		addSequential(new ShiftGear()); //Starts in high gear
-    	}else {
-    		addSequential(new ShiftGear());
-    	}
     	addSequential(new EncGyroPlease(1000,1000,1.0,true));//Forward in high gear
     	addSequential(new ShiftGear());//Shift to low 
     	addSequential(new AutonWait(0.25));//Delay

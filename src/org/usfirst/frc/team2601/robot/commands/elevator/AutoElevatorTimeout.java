@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2601.robot.commands.scaler;
+package org.usfirst.frc.team2601.robot.commands.elevator;
 
 import org.usfirst.frc.team2601.robot.Robot;
 
@@ -7,11 +7,14 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-//UNUSED COMMAND BECAUSE SCALER IS NOT USED
-public class ScalerButtonStop extends Command {
-
-    public ScalerButtonStop() {
-        //requires(Robot.scaler);
+public class AutoElevatorTimeout extends Command {
+	
+	double setPos;
+	
+    public AutoElevatorTimeout(double pos, double timeout) {
+    	requires(Robot.elevator);
+    	setTimeout(timeout);
+    	setPos = pos;
     }
 
     // Called just before this Command runs the first time
@@ -20,12 +23,12 @@ public class ScalerButtonStop extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Robot.scaler.ScalerButtonStop();
+    	Robot.elevator.autoElevator(setPos, true);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true

@@ -7,9 +7,9 @@
 
 package org.usfirst.frc.team2601.robot;
 
+import org.usfirst.frc.team2601.robot.commands.MoveArmPivotShoot;
+import org.usfirst.frc.team2601.robot.commands.MoveArmPivotUp;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.ShiftGear;
-import org.usfirst.frc.team2601.robot.commands.elevator.ElevatorMotor;
-import org.usfirst.frc.team2601.robot.commands.elevator.WormDrive;
 import org.usfirst.frc.team2601.robot.commands.scaler.ScalerButton;
 import org.usfirst.frc.team2601.robot.commands.scaler.ScalerButtonStop;
 
@@ -25,6 +25,7 @@ public class OI {
 	Constants constants = Constants.getInstance();
 	
 	public Joystick djs = new Joystick(constants.dJSPort);
+	public Joystick pivotJS = new Joystick(2);
 	
 	public OI() {
 		//Get constants
@@ -39,12 +40,16 @@ public class OI {
 		//Buttons for Operator
 		if (constants.autonBot == false) {
 			
-			Button elevator = new JoystickButton(constants.oBB, constants.elevatorB);
-			elevator.whenPressed(new ElevatorMotor());
-			
 			Button scaler = new JoystickButton(constants.oBB, constants.scalerB);
 			scaler.whenActive(new ScalerButton());
 			scaler.whenInactive(new ScalerButtonStop());
+			
+			Button armPivotShoot = new JoystickButton(constants.oBB, constants.armPivotDownB);
+			armPivotShoot.whenPressed(new MoveArmPivotShoot());
+			
+			Button armPivotUp = new JoystickButton(constants.oBB, constants.armPivotUpB);
+			armPivotUp.whenPressed(new MoveArmPivotUp());
+		
 		}
 	}
 }

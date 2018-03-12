@@ -12,13 +12,16 @@ public class Constants {
 		return instance;
 	}
 	//Robot Type Boolean (Alpha and Beta = false | AutonBot and TestBoard = true)
-	public final static boolean autonBot = true;
+	public final static boolean autonBot = false;
 	
-	//Robot Position
-	public final static int robotPos = 2;
+	//Robot Position For Autonomous
+	public final static int robotPos = 1;
 	
-	//Autonomous Booleans 
-	public final static boolean doubleScale = true;
+	//Operator Joystick Boolean
+	public final static boolean joystick = true;
+	
+	//Autonomous Boolean 
+	public final static boolean doubleScale = false;
 	
 	//Left Drivetrain Motor Ports
 	public final static int frontRightMPort = 0;//3 originally
@@ -31,7 +34,6 @@ public class Constants {
 	public final static int backLeftMPort = 5;//2 originally
 	
 	//Joystick Objects
-	//public static Joystick dJS; 
 	public static Joystick oBB;
 	
 	//Joystick Ports
@@ -42,38 +44,31 @@ public class Constants {
 	public final static int shiftB = 1; 
 	
 	//Operator Button Board Buttons
-	public final static int elevatorB = 6;
-	public final static int scalerB = 5;
-	public final static int armMotorsB = 4; 
-	public final static int armPistonsB = 3;
-	public final static int armPushB = 2;
+	public static int scalerB = 11;
+	public static int armIntakePistonsB = 1;
+	public static int armPivotDownB = 7;
+	public static int armPivotUpB = 8;
 	
 	//Solenoid Ports
 	public final static int shiftSolPortOn = 0;
 	public final static int shiftSolPortOff = 1;
 	public final static int armSolPortOn = 2;
 	public final static int armSolPortOff = 3;
-	public final static int pushArmSolPortOn = 4;
-	public final static int pushArmSolPortOff = 5;
-	
-	//NIDEC Brushless Motor Ports
-	public final static int brushlessPWMPort = 0;
-	public final static int brushlessDIOPort = 0;
 	
 	//Arm Motor Ports
 	public final static int leftArmMPort = 6;
 	public final static int rightArmMPort = 7;
+	public final static int pivotMPort = 0; //PWM channel Spark
 	
 	//Elevator Motor Ports
-	public final static int elevatorMPort = 8;
-	
-	//Scaler Motor Ports
-	public final static int scalerM1Port = 9;
-	public final static int scalerM2Port = 10;
+	public final static int elevatorM1Port = 8;
+	public final static int elevatorM2Port = 9;
+	public final static int elevatorM3Port = 10;
+	public final static int elevatorM4Port = 11;
 	
 	//Encoder Ports
 	public final static int leftEncPortA = 1;
-	public final static int leftEncPortB = 2;
+ 	public final static int leftEncPortB = 2;
 	public final static int rightEncPortA = 3;
 	public final static int rightEncPortB = 4;
 	
@@ -81,11 +76,30 @@ public class Constants {
 	public final static int ultraPortIn = 5;
 	public final static int ultraPortOut = 6;
 	
+	//Hall Effect Sensor
+	public final static int pivotSensorPort = 0;
+	
+	//limit Switches
+	public final static int upperLimitPort = 8;
+	public final static int lowerLimitPort = 9;
+	
 	//Booleans
 	public static boolean autonBool;
+	public static boolean autonEl;
+	public static boolean autonArm;
 	
 	//Tolerances
 	public final static int ultraTolerance = 1;
+	
+	//Arm Pivot Constants
+	public final static double upSwitchPivot = 25;
+	public final static double startUpPivot = 50;
+	//public static boolean down;
+	public static boolean up;
+	public static int pivotPos;
+	
+	//public final static double startDownPivot = 50;
+	//public final static double downSwitchPivot = 25;
 	
 	//Gyro Constants
 	public final static double gyroSlowAngle = 20;
@@ -93,9 +107,29 @@ public class Constants {
 	public final static double gyroStartSpeed = 0.45;
 	public final static double kPGyro = 0.08;
 	
+	//elevatorLimits;
+	public final static double elevatorUpperLimit = 10000;
+	public final static double elevatorLowerLimit = -20000;
+	
 	public static int autonTurnSpeed;
 	public static boolean gyroTurnBool;
 	public Constants(){
-		
+		/*if(joystick == false) {	
+			//Operator Button Board Buttons
+			elevatorB = 6;
+			scalerB = 5;
+			armIntakeMotorsB = 4; 
+			armIntakePistonsB = 3;
+			cubeHolderB = 10;
+		}else {
+			//Operator Joystick Buttons
+			//elevatorB = ;
+			//scalerB = 3;
+			//armIntakeMotorsB = ; 
+			armIntakePistonsB = 1;
+			cubeHolderB = 3;
+			armPivotUpB = 7;
+			armPivotDownB = 8;
+		//}*/
 	}
 }

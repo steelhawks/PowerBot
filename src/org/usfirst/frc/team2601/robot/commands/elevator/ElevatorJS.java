@@ -1,5 +1,6 @@
-package org.usfirst.frc.team2601.robot.commands.scaler;
+package org.usfirst.frc.team2601.robot.commands.elevator;
 
+import org.usfirst.frc.team2601.robot.Constants;
 import org.usfirst.frc.team2601.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -7,11 +8,14 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-//UNUSED COMMAND BECAUSE SCALER IS NOT USED
-public class ScalerButtonStop extends Command {
+public class ElevatorJS extends Command {
 
-    public ScalerButtonStop() {
-        //requires(Robot.scaler);
+	Constants constants = Constants.getInstance();
+	
+    public ElevatorJS() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    	requires(Robot.elevator);
     }
 
     // Called just before this Command runs the first time
@@ -20,7 +24,7 @@ public class ScalerButtonStop extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Robot.scaler.ScalerButtonStop();
+    	Robot.elevator.elevatorMotors(constants.oBB);
     }
 
     // Make this return true when this Command no longer needs to run execute()

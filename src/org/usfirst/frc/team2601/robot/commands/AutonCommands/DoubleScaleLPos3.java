@@ -17,12 +17,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class DoubleScaleLPos3 extends CommandGroup {
 
     public DoubleScaleLPos3() {
-    //Command for testing all the methods that are being used in autonommous 	
-    	if(Robot.drivetrain.shiftSol.get() == DoubleSolenoid.Value.kForward){
-    		addSequential(new ShiftGear());
-    	}else {
-    		addSequential(new ShiftGear());
-    	}
     	addSequential(new EncGyroPlease(4300,4300,1.0,true));//Forward towards switch
     	addSequential(new ShiftGear());//Shift low to slow it down to turn
     	addSequential(new EncGyroPlease(1700,1700,1.0,true));//Go forward in low
