@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.CenterSwitchLPos2;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.CenterSwitchRPos2;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos1;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos2;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos3;
@@ -61,8 +63,7 @@ public class Robot extends TimedRobot {
 	Constants constants = Constants.getInstance();
 	
 	public static final Drivetrain drivetrain = new Drivetrain();
-	public static final Arms arms =
-			new Arms();
+	public static final Arms arms = new Arms();
 	public static final Scaler scaler = new Scaler();
 	public static final Elevator elevator = new Elevator();
 	public static final ArmPivot pivot = new ArmPivot();
@@ -157,7 +158,7 @@ public class Robot extends TimedRobot {
 		
 		//All positions are the same from the perspectives of both alliances 
 		//Position one double scale autonomous
-		if(constants.robotPos == 1 && constants.doubleScale == true) {	
+		if(constants.robotPos == 1 && constants.doubleScale == true && constants.onlySwitch == false) {	
 			if(gameData.charAt(1) == 'L') {//LLL or RLR
 				m_autonomousCommand = new DoubleScaleLPos1();
 				System.out.println("Left side double scale auton in Pos1");
@@ -166,7 +167,7 @@ public class Robot extends TimedRobot {
 				System.out.println("Right side double scale auton in Pos1");
 			}
 		//Position two double scale autonomous
-		}else if(constants.robotPos == 2 && constants.doubleScale == true) {
+		}else if(constants.robotPos == 2 && constants.doubleScale == true && constants.onlySwitch == false) {
 			if(gameData.charAt(1) == 'L') {//LLL or RLR
 				m_autonomousCommand = new DoubleScaleLPos2();
 			}else if(gameData.charAt(1) == 'R') {//LRL or RRR
@@ -174,7 +175,7 @@ public class Robot extends TimedRobot {
 				System.out.println("Right side double scale auton in Pos2");
 			} 
 		//Position three double scale autonomous	
-		}else if(constants.robotPos == 3 && constants.doubleScale == true) {
+		}else if(constants.robotPos == 3 && constants.doubleScale == true && constants.onlySwitch == false) {
 			if(gameData.charAt(1) == 'L') {//LLL or RLR
 				m_autonomousCommand = new DoubleScaleLPos3();
 				System.out.println("Left side double scale auton in Pos3");
@@ -183,7 +184,7 @@ public class Robot extends TimedRobot {
 				System.out.println("Right side double scale auton in Pos3");	
 			}
 		//Position one scale switch autonomous 
-		}else if(constants.robotPos == 1 && constants.doubleScale == false) {
+		}else if(constants.robotPos == 1 && constants.doubleScale == false && constants.onlySwitch == false) {
 			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {//LLL 
 				m_autonomousCommand = new ScaleSwitchLLLPos1();
 				System.out.println("LLL scale switch auton in Pos1");
@@ -198,7 +199,7 @@ public class Robot extends TimedRobot {
 				System.out.println("RRR scale switch auton in Pos1");
 			}
 		//Position two scale switch autonomous
-		}else if(constants.robotPos == 2 && constants.doubleScale == false) {
+		}else if(constants.robotPos == 2 && constants.doubleScale == false && constants.onlySwitch == false) {
 			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {//LLL 
 				m_autonomousCommand = new ScaleSwitchLLLPos2();
 				System.out.println("LLL scale switch auton in Pos2");
@@ -213,7 +214,7 @@ public class Robot extends TimedRobot {
 				System.out.println("RRR scale switch auton in Pos2");
 			}
 		//Position three scale switch autonomous
-		}else if(constants.robotPos == 3 && constants.doubleScale == false) {
+		}else if(constants.robotPos == 3 && constants.doubleScale == false && constants.onlySwitch == false) {
 			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {//LLL 
 				m_autonomousCommand = new ScaleSwitchLLLPos3();
 				System.out.println("LLL scale switch auton in Pos3");
@@ -226,6 +227,13 @@ public class Robot extends TimedRobot {
 			}else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {//RRR
 				m_autonomousCommand = new ScaleSwitchRRRPos3();
 				System.out.println("RRR scale switch auton in Pos3");
+			}
+		//Position 2 CenterSwitch
+		}else if(constants.robotPos == 2 && constants.doubleScale == false && constants.onlySwitch == true) {
+			if(gameData.charAt(0) == 'L') {//LLL 
+				m_autonomousCommand = new CenterSwitchLPos2();
+			}else if(gameData.charAt(0) == 'R') {//RLR
+				m_autonomousCommand = new CenterSwitchRPos2();
 			}
 		}else {
 			//CrossAutoLine

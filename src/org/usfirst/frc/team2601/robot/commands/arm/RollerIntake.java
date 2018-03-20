@@ -10,11 +10,12 @@ import edu.wpi.first.wpilibj.command.Command;
 public class RollerIntake extends Command {
 
 	boolean dir;
+	boolean speed;
 	
-    public RollerIntake(boolean setdir) {
+    public RollerIntake(double timeout,boolean setSpeed) {
     	requires(Robot.arms);
-    	//setTimeout(timeout);
-    	setdir = dir;
+    	setTimeout(timeout);
+    	setSpeed = speed;
     }
 
     // Called just before this Command runs the first time
@@ -24,16 +25,17 @@ public class RollerIntake extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.arms.rollerIntake(dir);
+    	Robot.arms.rollerIntake(speed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.arms.isCubeIn();
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.arms.stopMotors();
     }
 
     // Called when another command which requires one or more of the same

@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2601.robot.commands.elevator;
+package org.usfirst.frc.team2601.robot.commands.arm;
 
 import org.usfirst.frc.team2601.robot.Robot;
 
@@ -7,24 +7,25 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class AutoElevatorTimeout extends Command {
+public class RollerOuttake extends Command {
+
+	boolean dir;
+	boolean speed;
 	
-	double setPos;
-	boolean setDir;
-	
-    public AutoElevatorTimeout(double timeout, boolean upInput) {
-    	requires(Robot.elevator);
+    public RollerOuttake(double timeout,boolean setSpeed) {
+    	requires(Robot.arms);
     	setTimeout(timeout);
-    	setDir = upInput;
+    	setSpeed = speed;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.arms.slowIntake = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.elevator.autoElevator(20,setDir);
+    	Robot.arms.rollerOuttake(speed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -34,6 +35,7 @@ public class AutoElevatorTimeout extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.arms.stopMotors();
     }
 
     // Called when another command which requires one or more of the same

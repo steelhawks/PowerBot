@@ -11,17 +11,21 @@ public class Constants {
 		}
 		return instance;
 	}
+	//MUST TEST INTAKE AUTON AT COMP
+	
+	public enum Operator_Type {Joystick, BB, Gamepad};
+	public Operator_Type operatorType = Operator_Type.Gamepad;
+	public enum Robot_Type {Beta,Alpha};
+	public Robot_Type robotType = Robot_Type.Alpha;
 	//Robot Type Boolean (Alpha and Beta = false | AutonBot and TestBoard = true)
 	public final static boolean autonBot = false;
 	
 	//Robot Position For Autonomous
 	public final static int robotPos = 1;
-	
-	//Operator Joystick Boolean
-	public final static boolean joystick = true;
-	
-	//Autonomous Boolean 
+		
+	//Autonomous Boolean f
 	public final static boolean doubleScale = false;
+	public final static boolean onlySwitch = false;
 	
 	//Left Drivetrain Motor Ports
 	public final static int frontRightMPort = 0;//3 originally
@@ -34,20 +38,27 @@ public class Constants {
 	public final static int backLeftMPort = 5;//2 originally
 	
 	//Joystick Objects
-	public static Joystick oBB;
+	public static Joystick oJS;
+	public static ButtonBoard BB;
+	public static F310 gamepad;
 	
 	//Joystick Ports
 	public final static int dJSPort = 0;
-	public final static int oBBPort = 1;
+	public final static int gamepadPort = 1;
 	
 	//Driver Joystick Button
 	public final static int shiftB = 1; 
 	
-	//Operator Button Board Buttons
-	public static int scalerB = 11;
-	public static int armIntakePistonsB = 1;
+	//Operator Joystick Buttons
+	//public static int scalerB = 11;
 	public static int armPivotDownB = 7;
 	public static int armPivotUpB = 8;
+	public static int armIntakeB = 10;
+	public static int armShootB = 9;
+	
+	//Operator ButtonBoard Buttons
+	public static int armPivotDownBB = 3;
+	public static int armPivotUpBB = 4;
 	
 	//Solenoid Ports
 	public final static int shiftSolPortOn = 0;
@@ -103,13 +114,13 @@ public class Constants {
 	
 	//Gyro Constants
 	public final static double gyroSlowAngle = 20;
-	public static double gyroSlowSpeed = 0.2;
-	public final static double gyroStartSpeed = 0.45;
+	public static double gyroSlowSpeed = 0.4;
+	public final static double gyroStartSpeed = 0.65;
 	public final static double kPGyro = 0.08;
 	
 	//elevatorLimits;
-	public final static double elevatorUpperLimit = 10000;
-	public final static double elevatorLowerLimit = -20000;
+	public final static double elevatorUpperLimit = 35000;
+	public final static double elevatorLowerLimit = -10;
 	
 	public static int autonTurnSpeed;
 	public static boolean gyroTurnBool;

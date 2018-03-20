@@ -22,6 +22,7 @@ public class AutoElevator extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	constants.autonEl = false;
     	Robot.elevator.elevatorM4.getSensorCollection().setQuadraturePosition(0,0);
     }
 

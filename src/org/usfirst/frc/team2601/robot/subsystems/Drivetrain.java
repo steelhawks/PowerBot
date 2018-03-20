@@ -70,7 +70,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	//Constructor for the subsystem
 	public Drivetrain() {
 		//Setting to HIGH gear by default
-		shiftSol.set(DoubleSolenoid.Value.kReverse);
+		shiftSol.set(DoubleSolenoid.Value.kForward);
 		//Resetting encoder values
 		leftEnc.reset();
 		rightEnc.reset();
@@ -203,6 +203,19 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     	double raw = ultraA.getVoltage();
     	return (raw/0.009766);//5 is voltage range, 512 is distance range
     }*/
+    public void intakeForward(double leftDist, double rightDist, double speed, boolean forward) {
+        	double gyroAngle = getGyroAngle();
+        	if(forward == true) {
+        		diffDrive.arcadeDrive(-speed, gyroAngle * kPGyro);
+    			Robot.arms.rollerIntake(false);
+    			if (-getLeftEncoderDist() > leftDist && getRightEncoderDist() > rightDist) {
+    				constants.autonBool = true;
+    			}
+    			if (-getLeftEncoderDist() <= leftDist && getRightEncoderDist() <= rightDist) {
+    				constants.autonBool = false;
+    			}
+        	}
+    }
     public void stopMotors() {
     	leftGroup.set(0);
     	rightGroup.set(0);

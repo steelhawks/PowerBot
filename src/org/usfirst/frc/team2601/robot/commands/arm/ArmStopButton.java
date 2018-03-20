@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2601.robot.commands.elevator;
+package org.usfirst.frc.team2601.robot.commands.arm;
 
 import org.usfirst.frc.team2601.robot.Robot;
 
@@ -7,15 +7,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class AutoElevatorTimeout extends Command {
-	
-	double setPos;
-	boolean setDir;
-	
-    public AutoElevatorTimeout(double timeout, boolean upInput) {
-    	requires(Robot.elevator);
-    	setTimeout(timeout);
-    	setDir = upInput;
+public class ArmStopButton extends Command {
+
+    public ArmStopButton() {
+        // Use requires() here to declare subsystem dependencies
+        requires(Robot.arms);
     }
 
     // Called just before this Command runs the first time
@@ -24,12 +20,12 @@ public class AutoElevatorTimeout extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.elevator.autoElevator(20,setDir);
+    	Robot.arms.armStop();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return isTimedOut();
+        return true;
     }
 
     // Called once after isFinished returns true

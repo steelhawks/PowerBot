@@ -1,6 +1,8 @@
 package org.usfirst.frc.team2601.robot.subsystems;
 
+import org.usfirst.frc.team2601.robot.ButtonBoard;
 import org.usfirst.frc.team2601.robot.Constants;
+import org.usfirst.frc.team2601.robot.F310;
 import org.usfirst.frc.team2601.robot.commands.ArmPivot.PivotJS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -46,7 +48,22 @@ public class ArmPivot extends Subsystem {
     }
     public void armPivotJS(Joystick js) {
     	double pivotPos = rotCounter.get();
-    	double y = js.getY();
+    	double y = 0;
+    	y = js.getY();
+    	armPivotM.set(y);
+    	SmartDashboard.putNumber("Hall", pivotPos);
+    }
+    public void armPivotGamepad(F310 js) {
+    	double pivotPos = rotCounter.get();
+    	double y = 0;
+    	y = js.getRightY();	
+    	armPivotM.set(y);
+    	SmartDashboard.putNumber("Hall", pivotPos);
+    }
+    public void armPivotBB(ButtonBoard js) {
+    	double pivotPos = rotCounter.get();
+    	double y = 0;
+    	y = js.getLeftY();	
     	armPivotM.set(y);
     	SmartDashboard.putNumber("Hall", pivotPos);
     }

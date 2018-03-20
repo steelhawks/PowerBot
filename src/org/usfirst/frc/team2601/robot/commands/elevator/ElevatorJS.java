@@ -2,6 +2,7 @@ package org.usfirst.frc.team2601.robot.commands.elevator;
 
 import org.usfirst.frc.team2601.robot.Constants;
 import org.usfirst.frc.team2601.robot.Robot;
+import org.usfirst.frc.team2601.robot.Constants.Operator_Type;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -24,7 +25,13 @@ public class ElevatorJS extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.elevator.elevatorMotors(constants.oBB);
+    	if(constants.operatorType == Operator_Type.Joystick) {
+    		Robot.elevator.elevatorMotorsJS(constants.oJS);
+    	}else if(constants.operatorType == Operator_Type.Gamepad){
+    		Robot.elevator.elevatorMotorsGamepad(constants.gamepad);
+    	}else {
+    		Robot.elevator.elevatorMotorsBB(constants.BB);
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
