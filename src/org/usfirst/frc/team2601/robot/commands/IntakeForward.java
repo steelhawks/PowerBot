@@ -41,7 +41,8 @@ Constants constants = Constants.getInstance();
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {///MUST TEST AT COMP
-        if(Robot.arms.isCubeIn() == true) {	
+       
+    	if(Robot.arms.isCubeIn() == true) {	
     		Robot.drivetrain.stopMotors();
         	return true;
         }else {
