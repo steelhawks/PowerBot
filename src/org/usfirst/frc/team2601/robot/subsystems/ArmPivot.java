@@ -6,6 +6,8 @@ import org.usfirst.frc.team2601.robot.F310;
 import org.usfirst.frc.team2601.robot.commands.ArmPivot.ArmPivotCommand;
 import org.usfirst.frc.team2601.robot.commands.ArmPivot.PivotJS;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.AnalogTriggerOutput;
@@ -26,12 +28,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ArmPivot extends Subsystem {
 	Constants constants = Constants.getInstance();
 
+	
 	//AnalogInput pivotInput = new AnalogInput(constants.pivotSensorPort);
 	AnalogTrigger pivotSensor = new AnalogTrigger(constants.pivotSensorPort);
 	public Counter rotCounter = new Counter(pivotSensor);
 	//AnalogTriggerOutput pivotOutput;
 	Spark armPivotM1 = new Spark(constants.pivotM1Port);
-	//Spark armPivotM2 = new Spark(constants.pivotM2Port);
+	public WPI_TalonSRX armPivotM = new WPI_TalonSRX(constants.pivotMPort);
 	
 	DigitalInput autoLimit = new DigitalInput(constants.autoPivotLimitPort);
 	
@@ -47,13 +50,41 @@ public class ArmPivot extends Subsystem {
 		rotCounter.setUpSourceEdge(true, false);
 		rotCounter.reset();
 		rotCounter.setUpdateWhenEmpty(false);
-	
+		armPivotM.getSensorCollection().setQuadraturePosition(0,0);
 	}
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         setDefaultCommand(new PivotJS());
     	//setDefaultCommand(new ArmPivotCommand());
+    }
+    public void autoPivot(double pos, boolean up) {
+		double pivotEncPos = armPivotM.getSensorCollection().getQuadraturePosition();
+    	if(constants.autonBot == false) {
+    		if(up == true) {
+    			//elevatorJSGroup1.set(0.5);
+    	    	//elevatorJSGroup2.set(-0.5);
+    			//elevatorM4.set(-0.75);
+    			armPivotM.set(-1.0);
+        		if (-pivotEncPos > pos) {
+					constants.autonArm = true;
+				}
+				if (-pivotEncPos <= pos) {
+					constants.autonArm = false;
+				}
+    		}else if (up == false){
+    			//elevatorM4.set(0.75);
+    			//elevatorJSGroup1.set(-0.5);
+    	    	//elevatorJSGroup2.set(0.5);
+    			armPivotM.set(1.0);
+    	    	if (pivotEncPos > pos) {
+    				constants.autonArm = true;
+    			}
+    			if (pivotEncPos <= pos) {
+    				constants.autonArm = false;
+    			}	
+    		}
+    	}
     }
     public void armPivotJS(Joystick js) {
     	double pivotPos = rotCounter.get();
@@ -64,13 +95,14 @@ public class ArmPivot extends Subsystem {
     	SmartDashboard.putNumber("Hall", pivotPos);
     }
     public void armPivotGamepad(F310 js) {
+		double pivotEncPos = armPivotM.getSensorCollection().getQuadraturePosition();
     	double pivotPos = rotCounter.get();
     	double y = 0;
     	y = js.getRightY();	
     	armPivotM1.set(y);
-    	//pivotGroup.set(y);
+    	armPivotM.set(y);
     	SmartDashboard.putNumber("Hall", pivotPos);
-    	SmartDashboard.putBoolean("PivotLimit", autoLimit.get());
+    	SmartDashboard.putNumber("PivotEncPos", pivotEncPos);
     }
     public void armPivotBB(ButtonBoard js) {
     	double pivotPos = rotCounter.get();
@@ -109,7 +141,8 @@ public class ArmPivot extends Subsystem {
     }
     public void stopPivotMotors() {
     	//pivotGroup.set(0);
-    	armPivotM1.set(0);        	
+    	armPivotM1.set(0); 
+    	armPivotM.set(0);
     }
     public void autoArmPivotDown() {
     	armPivotM1.set(-1);

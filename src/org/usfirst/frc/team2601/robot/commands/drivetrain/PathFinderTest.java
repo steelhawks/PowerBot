@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2601.robot.commands.ArmPivot;
+package org.usfirst.frc.team2601.robot.commands.drivetrain;
 
 import org.usfirst.frc.team2601.robot.Constants;
 import org.usfirst.frc.team2601.robot.Robot;
@@ -8,41 +8,43 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class AutoPivot extends Command {
+public class PathFinderTest extends Command {
 
 	Constants constants = Constants.getInstance();
-	double setPos;
-	boolean setDir;//up == true
 	
-    public AutoPivot(double pos, boolean up) {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-    	requires(Robot.pivot);
-    	setPos = pos;
-    	setDir = up;
+	int setLeftDist = 0;
+	int setRightDist = 0;
+	double setSpeed = 0;
+	boolean setForward = true;
+	
+    public PathFinderTest(int leftDist, int rightDist) {
+        requires(Robot.drivetrain);
+        setLeftDist = leftDist;
+        setRightDist = rightDist;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	//Robot.pivot.rotCounter.reset();
-    	//Robot.pivot.pivotEnc.reset();
-    	Robot.pivot.armPivotM.getSensorCollection().setQuadraturePosition(0,0);
+    	constants.autonBool = false;
+    	Robot.drivetrain.leftEnc.reset();
+    	Robot.drivetrain.rightEnc.reset();
+    	Robot.drivetrain.gyro.reset();
+    	Robot.drivetrain.gyro.zeroYaw();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.pivot.autoPivot(setPos, setDir);
-    	//Robot.pivot.ghettoAutoPivot(setPos, setDir);
+    	//Robot.drivetrain.encGyroPathPlease(setLeftDist, setRightDist);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return constants.autonArm;
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.pivot.stopPivotMotors();
+    	Robot.drivetrain.stopMotors();
     }
 
     // Called when another command which requires one or more of the same

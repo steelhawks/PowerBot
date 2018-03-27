@@ -74,7 +74,7 @@ public class Constants {
 	public final static int leftArmMPort = 6;
 	public final static int rightArmMPort = 7;
 	public final static int pivotM1Port = 0; //PWM channel Spark
-	//public final static int pivotM2Port = 1;
+	public final static int pivotMPort = 12;//Talon  pivot
 	
 	//Elevator Motor Ports
 	public final static int elevatorM1Port = 8;

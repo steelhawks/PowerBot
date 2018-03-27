@@ -67,7 +67,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 	static final double kF = 0.00;
 	
 	static final double kToleranceDegrees = 2.0f;
-	//Constructor for the subsystem
+
 	public Drivetrain() {
 		//Setting to HIGH gear by default
 		shiftSol.set(DoubleSolenoid.Value.kForward);
@@ -86,7 +86,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 		pid.setInputRange(-180.0f, 180.0f);
 		pid.setOutputRange(-0.5f, 0.5f);
 		pid.setAbsoluteTolerance(kToleranceDegrees);
-		pid.setContinuous(true);
+		pid.setContinuous(true);	
 	}
 	//Set default command for the subsystem
     public void initDefaultCommand() {
@@ -230,6 +230,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
     			}
         	}
     }
+    
     public void stopMotors() {
     	leftGroup.set(0);
     	rightGroup.set(0);

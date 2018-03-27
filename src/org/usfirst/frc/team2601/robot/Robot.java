@@ -24,6 +24,9 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.CenterSwitchLPos2;
@@ -49,6 +52,8 @@ import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRRRPos3;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.DiffDrive;
 import org.usfirst.frc.team2601.robot.subsystems.ArmPivot;
 import org.usfirst.frc.team2601.robot.subsystems.Arms;
+import org.usfirst.frc.team2601.robot.subsystems.BTMacroPlay;
+import org.usfirst.frc.team2601.robot.subsystems.BTMacroRecord;
 import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2601.robot.subsystems.Elevator;
 import org.usfirst.frc.team2601.robot.subsystems.Scaler;
@@ -77,7 +82,17 @@ public class Robot extends TimedRobot {
 	SendableChooser m_chooser = new SendableChooser();
 	public static Compressor compressor = new Compressor(0);
 	Thread visionThread;
-		
+	
+	//BTMain
+	/*boolean isRecording = false;
+	//autoNumber defines an easy way to change the file you are recording to/playing from, in case you want to make a
+	//few different auto programs
+	static final int autoNumber = 10;
+	//autoFile is a global constant that keeps you from recording into a different file than the one you play from
+	public static final String autoFile = new String("/Desktop" + autoNumber + ".csv");
+	BTMacroPlay player;	
+	BTMacroRecord recorder;
+	*/
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -85,25 +100,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		//SmartDashboard.putNumber("constants.robotPos", constants.robotPos);
-		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setResolution(640, 480);
 		
-		/*new Thread(() -> {
-			UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-			camera.setResolution(640, 480);
-			
-			CvSink cvSink = CameraServer.getInstance().getVideo();
-			CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
-			
-			Mat source = new Mat();
-			Mat output = new Mat();
-			
-			while(!Thread.interrupted()) {
-				cvSink.grabFrame(source);
-				//Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-				outputStream.putFrame(output);
-			}
-		}).start();		*/
 		m_chooser.addObject("Position 1", 1);
 		m_chooser.addObject("Position 2", 2);
 		m_chooser.addObject("Position 3", 3);
@@ -246,11 +243,24 @@ public class Robot extends TimedRobot {
 		}else {
 			//CrossAutoLine
 		}
-		// schedule the autonomous command (example)
-	if (m_autonomousCommand != null) {
-		m_autonomousCommand.start();
+		
+    	//try to create a new player
+    	//if there is a file, great - you have a new non-null object "player"
+    	/*try 
+    	{
+    		player = new BTMacroPlay();
+		} 
+    
+		//if not, print out an error
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}*/
+		
+		if (m_autonomousCommand != null) {
+			m_autonomousCommand.start();
+		}
 	}
-}
 		
 			
 	/**
@@ -260,6 +270,19 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		//compressor.start();
+		//as long as there is a file you found, then use the player to scan the .csv file
+		//and set the motor values to their specific motors
+		/*if (player != null)
+		{
+			player.play();
+		}
+		//do nothing if there is no file
+		//if there is a player and you've disabled autonomous, then flush the rest of the values
+				//and stop reading the file
+		if(player!= null)
+			{
+				player.end();
+			}*/
 	}
 
 	@Override
@@ -269,7 +292,18 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if (m_autonomousCommand != null) {
+		 /*try {
+				recorder = new BTMacroRecord();
+				
+			} 
+			catch (IOException e) 
+			{
+				System.out.println("fail");
+				e.printStackTrace();
+			}*/
+			
+		
+    	if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
 	}
@@ -280,6 +314,49 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+       //the statement in this "if" checks if a button you designate as your record button 
+		//has been pressed, and stores the fact that it has been pressed in a variable
+		
+		/*if (Robot.m_oi.djs.getRawButton(11))
+		{
+			isRecording = !isRecording;
+			System.out.println("record");
+		}  
+		//if our record button has been pressed, lets start recording!
+		if (isRecording)
+		{
+			try
+			{
+				//if we succesfully have made the recorder object, lets start recording stuff
+				//2220 uses a storage object that we can get motors values, etc. from.
+				//if you don't need to pass an object like that in, modify the methods/classes
+				if(recorder != null)
+				{
+					recorder.record();
+				}
+			
+			}
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+	
+	
+	//once we're done recording, the last thing we'll do is clean up the recording using the end
+	//function. more info on the end function is in the record class
+	try 
+	{
+		if(recorder != null)
+		{
+			recorder.end();
+		}
+	} 
+	catch (IOException e) 
+	{
+		e.printStackTrace();
+	}*/
+	
 	}
 
 	/**
