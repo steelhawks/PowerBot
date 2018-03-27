@@ -12,9 +12,12 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -49,6 +52,7 @@ import org.usfirst.frc.team2601.robot.subsystems.Arms;
 import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2601.robot.subsystems.Elevator;
 import org.usfirst.frc.team2601.robot.subsystems.Scaler;
+import org.usfirst.frc.team2601.robot.subsystems.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -68,17 +72,19 @@ public class Robot extends TimedRobot {
 	public static final Elevator elevator = new Elevator();
 	public static final ArmPivot pivot = new ArmPivot();
 	public static OI m_oi = new OI();
+	public static Vision vision = new Vision();
 	Command m_autonomousCommand;
-	SendableChooser<Command> m_chooser = new SendableChooser<>();
+	SendableChooser m_chooser = new SendableChooser();
 	public static Compressor compressor = new Compressor(0);
 	Thread visionThread;
-	
+		
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+		//SmartDashboard.putNumber("constants.robotPos", constants.robotPos);
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 		camera.setResolution(640, 480);
 		
@@ -98,9 +104,10 @@ public class Robot extends TimedRobot {
 				outputStream.putFrame(output);
 			}
 		}).start();		*/
-		m_chooser.addDefault("Default Auto", new DiffDrive());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", m_chooser);
+		m_chooser.addObject("Position 1", 1);
+		m_chooser.addObject("Position 2", 2);
+		m_chooser.addObject("Position 3", 3);
+		SmartDashboard.putData("constants.robotPosition", m_chooser);
 		Robot.drivetrain.leftEnc.reset();
 		Robot.drivetrain.rightEnc.reset();
 		compressor.enabled();
@@ -149,8 +156,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand = m_chooser.getSelected();
-
+		//constants.robotPos = (int) SmartDashboard.getNumber("constants.robotPos",0);
+		Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
+		//320x240
 		String gameData;
 		Alliance currAlliance;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -158,7 +166,7 @@ public class Robot extends TimedRobot {
 		
 		//All positions are the same from the perspectives of both alliances 
 		//Position one double scale autonomous
-		if(constants.robotPos == 1 && constants.doubleScale == true && constants.onlySwitch == false) {	
+		if(constants.robotPos == 1 && constants.doubleScale == true) {	
 			if(gameData.charAt(1) == 'L') {//LLL or RLR
 				m_autonomousCommand = new DoubleScaleLPos1();
 				System.out.println("Left side double scale auton in Pos1");
@@ -175,7 +183,7 @@ public class Robot extends TimedRobot {
 				System.out.println("Right side double scale auton in Pos2");
 			} 
 		//Position three double scale autonomous	
-		}else if(constants.robotPos == 3 && constants.doubleScale == true && constants.onlySwitch == false) {
+		}else if(constants.robotPos == 3 && constants.doubleScale == true) {
 			if(gameData.charAt(1) == 'L') {//LLL or RLR
 				m_autonomousCommand = new DoubleScaleLPos3();
 				System.out.println("Left side double scale auton in Pos3");
@@ -184,7 +192,7 @@ public class Robot extends TimedRobot {
 				System.out.println("Right side double scale auton in Pos3");	
 			}
 		//Position one scale switch autonomous 
-		}else if(constants.robotPos == 1 && constants.doubleScale == false && constants.onlySwitch == false) {
+		}else if(constants.robotPos == 1 && constants.doubleScale == false) {
 			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {//LLL 
 				m_autonomousCommand = new ScaleSwitchLLLPos1();
 				System.out.println("LLL scale switch auton in Pos1");
@@ -214,7 +222,7 @@ public class Robot extends TimedRobot {
 				System.out.println("RRR scale switch auton in Pos2");
 			}
 		//Position three scale switch autonomous
-		}else if(constants.robotPos == 3 && constants.doubleScale == false && constants.onlySwitch == false) {
+		}else if(constants.robotPos == 3 && constants.doubleScale == false) {
 			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {//LLL 
 				m_autonomousCommand = new ScaleSwitchLLLPos3();
 				System.out.println("LLL scale switch auton in Pos3");
@@ -256,6 +264,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		Robot.arms.armSol.set(DoubleSolenoid.Value.kForward);
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove

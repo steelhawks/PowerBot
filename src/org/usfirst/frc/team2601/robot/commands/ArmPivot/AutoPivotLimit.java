@@ -1,43 +1,39 @@
-package org.usfirst.frc.team2601.robot.commands.arm;
+package org.usfirst.frc.team2601.robot.commands.ArmPivot;
 
+import org.usfirst.frc.team2601.robot.Constants;
 import org.usfirst.frc.team2601.robot.Robot;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class RollerOuttake extends Command {
+public class AutoPivotLimit extends Command {
 
-	boolean dir;
-	boolean speed;
+	Constants constants = Constants.getInstance();
 	
-    public RollerOuttake(double timeout,boolean setSpeed) {
-    	requires(Robot.arms);
-    	setTimeout(timeout);
-    	setSpeed = speed;
+    public AutoPivotLimit() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    	requires(Robot.pivot);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.arms.slowIntake = false;
-		Robot.arms.armSol.set(DoubleSolenoid.Value.kForward);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.arms.rollerOuttake(speed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return isTimedOut();
+        return constants.autonArm;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.arms.stopMotors();
+    	Robot.pivot.stopPivotMotors();
     }
 
     // Called when another command which requires one or more of the same

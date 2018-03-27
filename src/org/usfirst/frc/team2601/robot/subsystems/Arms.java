@@ -20,7 +20,7 @@ public class Arms extends Subsystem {
 	public static WPI_TalonSRX leftArmM; 
 	public static WPI_TalonSRX rightArmM;
 	public static boolean slowIntake;
-	DoubleSolenoid armSol;
+	public DoubleSolenoid armSol;
 	public static AnalogInput cubeir = new AnalogInput(2);
 	//Set the default command for the subsystem
     public void initDefaultCommand() {
@@ -29,10 +29,11 @@ public class Arms extends Subsystem {
     //Constructor for the subsystem
     public Arms() {
     	if (constants.autonBot == false) {
+    		constants.armUp = false;
     		leftArmM = new WPI_TalonSRX(constants.leftArmMPort);
     		rightArmM = new WPI_TalonSRX(constants.rightArmMPort);
     		armSol = new DoubleSolenoid(constants.armSolPortOn, constants.armSolPortOff);
-    		armSol.set(DoubleSolenoid.Value.kReverse);
+    		armSol.set(DoubleSolenoid.Value.kForward);
     	}
     }
     //Method for using the motors through a joystick
@@ -63,9 +64,10 @@ public class Arms extends Subsystem {
     	}
     }
     public void armShootButton() {
+    	armSol.set(DoubleSolenoid.Value.kForward);
     	if(leftArmM.get() == 0 && rightArmM.get() == 0){
-    		leftArmM.set(-1);
-    		rightArmM.set(1);
+    		leftArmM.set(-0.75);
+    		rightArmM.set(0.75);
     	}else{
     		leftArmM.set(0);
     		rightArmM.set(0);
@@ -76,9 +78,11 @@ public class Arms extends Subsystem {
     	rightArmM.set(0);
     }
     public void rollerOuttake(boolean fast) {
+    	//armIntakePistons();
+		armSol.set(DoubleSolenoid.Value.kForward);
     	if(fast == false) {
-	    	leftArmM.set(-0.75);
-	    	rightArmM.set(0.75);
+	    	leftArmM.set(-0.7);
+	    	rightArmM.set(0.7);
     	}else {
     		leftArmM.set(-1.0);
 	    	rightArmM.set(1.0);
@@ -102,7 +106,7 @@ public class Arms extends Subsystem {
     public static boolean isCubeIn(){
         	int i=0;
         	while(true){
-    	   		if((cubeir.getValue() > 1400) == true && (cubeir.getValue() < 2400) == true){//change threshold value
+    	   		if((cubeir.getValue() > 1800) == true && (cubeir.getValue() < 2400) == true){//change threshold value
     	    		i++;
     	    		//if(i > 5){
     	    			//rollerSlowIntake(true);

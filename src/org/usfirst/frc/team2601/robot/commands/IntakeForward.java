@@ -43,8 +43,8 @@ Constants constants = Constants.getInstance();
     protected boolean isFinished() {///MUST TEST AT COMP
        
     	if(Robot.arms.isCubeIn() == true) {	
-    		Robot.drivetrain.stopMotors();
-        	return true;
+    		//Robot.drivetrain.stopMotors();
+    		return true;
         }else {
         	return false;
         }
@@ -52,7 +52,6 @@ Constants constants = Constants.getInstance();
 
     // Called once after isFinished returns true
     protected void end() {
-    	
     	Robot.drivetrain.stopMotors();
     	Robot.arms.stopMotors();
     }

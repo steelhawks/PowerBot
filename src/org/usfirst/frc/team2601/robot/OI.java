@@ -10,10 +10,16 @@ package org.usfirst.frc.team2601.robot;
 import org.usfirst.frc.team2601.robot.Constants.Operator_Type;
 import org.usfirst.frc.team2601.robot.commands.MoveArmPivotShoot;
 import org.usfirst.frc.team2601.robot.commands.MoveArmPivotUp;
+import org.usfirst.frc.team2601.robot.commands.ArmPivot.ArmPivotCommand;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmIntakeButton;
+import org.usfirst.frc.team2601.robot.commands.arm.ArmPiston;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmShootButton;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmStopButton;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.ShiftGear;
+import org.usfirst.frc.team2601.robot.commands.elevator.ElDown;
+import org.usfirst.frc.team2601.robot.commands.elevator.ElUp;
+import org.usfirst.frc.team2601.robot.commands.elevator.ElevatorJS;
+import org.usfirst.frc.team2601.robot.commands.elevator.StopElM;
 import org.usfirst.frc.team2601.robot.commands.scaler.ScalerButton;
 import org.usfirst.frc.team2601.robot.commands.scaler.ScalerButtonStop;
 
@@ -54,6 +60,19 @@ public class OI {
 			//scaler.whenActive(new ScalerButton());
 			//scaler.whenInactive(new ScalerButtonStop());
 			
+			/*Button elUp = new JoystickButton(placeholder, 4);
+			elUp.whenPressed(new ElUp());
+			elUp.whenInactive(new StopElM());
+			*/
+			Button elDown = new JoystickButton(placeholder, 1);
+			constants.slowBtnOn = false;
+			if(constants.slowBtnOn == true) {
+				elDown.whenPressed(new ElDown());
+				elDown.whenInactive(new StopElM());
+			}
+			Button armPiston = new JoystickButton(placeholder, constants.armPistonB);
+			armPiston.whenPressed(new ArmPiston());
+			
 			Button armPivotShoot = new JoystickButton(placeholder, constants.armPivotDownB);
 			armPivotShoot.whenPressed(new MoveArmPivotShoot());
 			
@@ -75,8 +94,8 @@ public class OI {
 				armIntake.whenInactive(new ArmStopButton());
 				armShoot.whenInactive(new ArmStopButton());
 			}else {
-				Button armIntake = new JoystickButton(constants.BB, 6);
-				Button armShoot = new JoystickButton(constants.BB, 5);
+				Button armIntake = new JoystickButton(constants.BB, 9);
+				Button armShoot = new JoystickButton(constants.BB, 10);
 				
 				if(armIntake.get() == true && armShoot.get() == false) {
 					armIntake.whenActive(new ArmIntakeButton());

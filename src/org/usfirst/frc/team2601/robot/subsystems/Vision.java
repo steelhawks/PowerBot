@@ -46,11 +46,13 @@ public class Vision extends Subsystem {
     public void initDefaultCommand() {;
     }
     //Vision
-    public void getGearPosition(){
+    public void getCubePosition(){
     	server.getTable("CVResultsTable");
     	
     	Number[] xValues = new Double[1];
-		//19.5 cm
+		Number[] distValues = new Double[1];
+		Number[] areaValues = new Double[1];
+    	//19.5 cm
 			try{
 				
 				//System.out.println("PAST IF");
@@ -61,14 +63,12 @@ public class Vision extends Subsystem {
 				
 				SmartDashboard.putBoolean("aligned", align);
 				if(currAngle > targetAngle + offset){//turn left
-					Robot.drivetrain.leftGroup.set(-0.15);//-0.15
-					Robot.drivetrain.rightGroup.set(-0.15);
-			    	
+					Robot.drivetrain.leftGroup.set(-0.5);//-0.15
+					Robot.drivetrain.rightGroup.set(-0.5);
 			    	align = false;
 			    }else if(currAngle < targetAngle - offset){//turn right
-			    	Robot.drivetrain.leftGroup.set(0.15);//0.15
-					Robot.drivetrain.rightGroup.set(0.15);
-			       		
+			    	Robot.drivetrain.leftGroup.set(0.5);//0.15
+					Robot.drivetrain.rightGroup.set(0.5);
 			    	align = false;
 			    }else if((currAngle >= (targetAngle + offset) || currAngle >= (targetAngle - offset) || currAngle == targetAngle)){
 					Robot.drivetrain.leftGroup.set(0);
@@ -79,7 +79,7 @@ public class Vision extends Subsystem {
 				
 			}
 			catch(ArrayIndexOutOfBoundsException exp){
-				//System.out.println("No values being published");
+				System.out.println("No values being published");
 			}
 			
 			i++;

@@ -116,6 +116,20 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 		SmartDashboard.putNumber("FrontRightM Voltage",frontRightM.getBusVoltage());
 		SmartDashboard.putNumber("MidRightM Voltage", midRightM.getBusVoltage());
 		SmartDashboard.putNumber("IRValue", Robot.arms.cubeir.getValue());
+		boolean looseGrip;
+		if(Robot.arms.armSol.get() == DoubleSolenoid.Value.kForward) {
+			looseGrip = true;
+		}else {
+			looseGrip = false;
+		}
+		SmartDashboard.putBoolean("LooseGrip?", looseGrip);//green means yes
+		boolean highGear;
+		if(shiftSol.get() == DoubleSolenoid.Value.kForward) {
+			highGear = true;
+		}else {
+			highGear = false;
+		}
+		SmartDashboard.putBoolean("HighGear?", highGear);
 		//SmartDashboard.putNumber("BackRightM Voltage", backRightM.getBusVoltage());
     }
     //Method for shifting

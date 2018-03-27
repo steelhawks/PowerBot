@@ -40,19 +40,20 @@ public class Elevator extends Subsystem {
 	public WPI_TalonSRX elevatorM3 = new WPI_TalonSRX(constants.elevatorM3Port);
 	public WPI_TalonSRX elevatorM4 = new WPI_TalonSRX(constants.elevatorM4Port);
 	
-	//SpeedControllerGroup elevatorGroup = new SpeedControllerGroup(elevatorM1, elevatorM2, elevatorM3, elevatorM4);
+	SpeedControllerGroup elevatorGroup = new SpeedControllerGroup(elevatorM1, elevatorM2, elevatorM3, elevatorM4);
 	
 	DigitalInput upperLimit = new DigitalInput(constants.upperLimitPort);
-	DigitalInput lowerLimit = new DigitalInput(constants.lowerLimitPort);
+	public DigitalInput lowerLimit = new DigitalInput(constants.lowerLimitPort);
     public void initDefaultCommand() {
-    	setDefaultCommand(new ElevatorJS());
+    	setDefaultCommand(new ElevatorJS(true));
     }
     //Constructor for the subsystem
     public Elevator() {
     	if (constants.autonBot == false) {
-    		elevatorM1.set(ControlMode.Follower,constants.elevatorM4Port);
+    		/*elevatorM1.set(ControlMode.Follower,constants.elevatorM4Port);
     		elevatorM2.set(ControlMode.Follower,constants.elevatorM4Port);
     		elevatorM3.set(ControlMode.Follower,constants.elevatorM4Port);
+    		*/
         	//elevatorJSGroup1 = new SpeedControllerGroup(elevatorM1, elevatorM2);
 	    	//elevatorJSGroup2 = new SpeedControllerGroup(elevatorM3, elevatorM4);
 	    	elevatorM4.getSensorCollection().setQuadraturePosition(0,0);
@@ -65,7 +66,8 @@ public class Elevator extends Subsystem {
     		if(up == true) {
     			//elevatorJSGroup1.set(0.5);
     	    	//elevatorJSGroup2.set(-0.5);
-    			elevatorM4.set(-0.75);
+    			//elevatorM4.set(-0.75);
+    			elevatorGroup.set(-0.75);
         		if (-elevatorPos > pos) {
 					constants.autonEl = true;
 				}
@@ -73,9 +75,10 @@ public class Elevator extends Subsystem {
 					constants.autonEl = false;
 				}
     		}else if (up == false){
-    			elevatorM4.set(0.75);
+    			//elevatorM4.set(0.75);
     			//elevatorJSGroup1.set(-0.5);
     	    	//elevatorJSGroup2.set(0.5);
+    			elevatorGroup.set(0.5);
     	    	if (elevatorPos > pos) {
     				constants.autonEl = true;
     			}
@@ -86,7 +89,8 @@ public class Elevator extends Subsystem {
     	}
     }
     public void stopMotors() {
-    	elevatorM4.set(0);
+    	//elevatorM4.set(0);
+    	elevatorGroup.set(0);
     }
   //Method for using the motors
     public void elevatorMotorsJS(Joystick js) {
@@ -94,8 +98,8 @@ public class Elevator extends Subsystem {
     		//double elevatorPos = elevatorM4.getSensorCollection().getQuadraturePosition();
     		double y = 0;
     		y = js.getY();	
-	    	elevatorM4.set(y);
-    		
+	    	elevatorGroup.set(y);
+    		//elevatorM4.set(y);
 		    //SmartDashboard.putNumber("TalonEnc" , elevatorPos);
 	    	
         }
@@ -104,46 +108,61 @@ public class Elevator extends Subsystem {
     	if(constants.autonBot == false) {
     		double elevatorPos = elevatorM4.getSensorCollection().getQuadraturePosition();
 	    	double y = 0;
-    		/*if(lowerLimit.get() == false) {
-    			if(js.getLeftY() > 0) {
+    		if(upperLimit.get() == false) {
+    			if(js.getLeftY() < 0) {
     				y = 0;
     			}else {
     				y = js.getLeftY();
     			}
-    		}
-    		if (lowerLimit.get() == false) {
+    		}else if (lowerLimit.get() == false) {
     			if(js.getLeftY() > 0) {
-    				y = 0;
-    				
+    				y = 0;	
     			}else {
+    				constants.slowBtnOn = true;
     				y = js.getLeftY();
     			}
     		}else {
     			y = js.getLeftY();
-    		}*/
-	    	y = js.getLeftY();
+    		}
+	    	//y = js.getLeftY();
     		
-	    	elevatorM4.set(y);
-	    	if(elevatorM4.getSensorCollection().isFwdLimitSwitchClosed() == true) {	
-    		//if(lowerLimit.get() == true) {
-    	    	elevatorM4.getSensorCollection().setQuadraturePosition(0,0);
+	    	//elevatorM4.set(y);
+    		elevatorGroup.set(y);
+    	    if(lowerLimit.get() == true) {
+	    		elevatorM4.getSensorCollection().setQuadraturePosition(0,0);
     		}
 		    SmartDashboard.putNumber("TalonEnc" , elevatorPos);
-	    	SmartDashboard.putBoolean("LowLimit", elevatorM4.getSensorCollection().isFwdLimitSwitchClosed());//lowerLimit.get());
-	    	SmartDashboard.putBoolean("UpperLimit", elevatorM4.getSensorCollection().isRevLimitSwitchClosed());//upperLimit.get());
-	    	//SmartDashboard.putBoolean("LowLimit", lowerLimit);
+	    	SmartDashboard.putBoolean("LowLimit", lowerLimit.get());//elevatorPos.elevatorM4.getSensorCollection().isFwdLimitSwitchClosed());//lowerLimit.get());
+	    	SmartDashboard.putBoolean("UpperLimit", upperLimit.get());//elevatorM4.getSensorCollection().isRevLimitSwitchClosed());//upperLimit.get());
         }
 	}
-    public void elevatorMotorsBB(ButtonBoard js) {
+    public void elevatorMotorsBB(boolean up) {
     	if(constants.autonBot == false) {
     		//double elevatorPos = elevatorM4.getSensorCollection().getQuadraturePosition();
     		double y = 0;
-      		y = js.getRightY();
- 	    	elevatorM4.set(y);
-    		
+      		//y = js.getRightY();
+ 	    	if(up == true) {
+ 	    		//elevatorM4.set(1);
+ 	    		elevatorGroup.set(1);
+ 	    	}
+ 	    	if(up == false) {
+ 	    		//elevatorM4.set(-1);
+ 	    		elevatorGroup.set(-1);
+ 	    	}
 		    //SmartDashboard.putNumber("TalonEnc" , elevatorPos);
 	    	
         }
+    }
+    public void elDown() {
+    	if (lowerLimit.get() == false) {
+			constants.slowBtnOn = false;
+		}else {
+			//elevatorM4.set(0.25);
+			elevatorGroup.set(0.25);
+		}
+    }
+    public void elUp() {
+    	//elevatorM4.set(-0.75);
     }
 }
 

@@ -2,6 +2,7 @@ package org.usfirst.frc.team2601.robot.commands.arm;
 
 import org.usfirst.frc.team2601.robot.Robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -35,6 +36,7 @@ public class RollerIntake extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
     	Robot.arms.stopMotors();
     }
 

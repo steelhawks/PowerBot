@@ -32,6 +32,7 @@ public class ScaleSwitchRRRPos1 extends CommandGroup {
 			Robot.drivetrain.midLeftM.setExpiration(120);
 			Robot.drivetrain.frontRightM.setExpiration(120);
 			Robot.drivetrain.midRightM.setExpiration(120);
+	    	addSequential(new AutoPivot(35,false));
 			addSequential(new EncGyroPlease(9550,9550,1.0,true));//Forward towards switch
 	    	addSequential(new AutonWait(0.2));//Delay
 			addSequential(new ShiftGear());//Shift low to slow it down to turn
@@ -42,15 +43,16 @@ public class ScaleSwitchRRRPos1 extends CommandGroup {
 	    	addSequential(new ShiftGear());
 	    	addSequential(new AutonTurn(85, true));//Turn left in low 88
 	    	addSequential(new EncGyroPlease(975,975,1.0,true));
-	    	addSequential(new AutoPivot(35,false));
 	    	addSequential(new AutoElevator(28000,true));//elevator up
-	    	addSequential(new RollerOuttake(0.75,false));
+	    	addSequential(new RollerOuttake(0.75,true));
 			addSequential(new AutoElevator(30000,false));//elevator down
 	    	addSequential(new EncGyroPlease(500,500,1.0,false));
 	    	addSequential(new AutonTurn(180, false));//Turn right the switch
+	    	
 	    	//addParallel(new EncGyroPlease(550,550,0.75,true));//Travel towards the switch
 	    	//addSequential(new RollerIntake(1.5, false));
-	    	addSequential(new IntakeForward(550,550,0.75,true));
+	    	addParallel(new RollerIntake(1.5,false));
+			addSequential(new IntakeForward(550,550,0.75,true));
 	    	addSequential(new AutonWait(0.5));
 	    	addParallel(new AutonTurn(10,false));
 	    	addSequential(new AutoElevator(10000,true));

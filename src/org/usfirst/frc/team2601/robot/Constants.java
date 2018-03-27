@@ -21,11 +21,11 @@ public class Constants {
 	public final static boolean autonBot = false;
 	
 	//Robot Position For Autonomous
-	public final static int robotPos = 1;
+	public final static int robotPos = 2;
 		
 	//Autonomous Boolean f
 	public final static boolean doubleScale = false;
-	public final static boolean onlySwitch = false;
+	public final static boolean onlySwitch = true;
 	
 	//Left Drivetrain Motor Ports
 	public final static int frontRightMPort = 0;//3 originally
@@ -51,14 +51,18 @@ public class Constants {
 	
 	//Operator Joystick Buttons
 	//public static int scalerB = 11;
+	public static boolean armUp;
 	public static int armPivotDownB = 7;
 	public static int armPivotUpB = 8;
 	public static int armIntakeB = 10;
 	public static int armShootB = 9;
+	public static int armPistonB = 2;
 	
 	//Operator ButtonBoard Buttons
 	public static int armPivotDownBB = 3;
 	public static int armPivotUpBB = 4;
+	
+	public static boolean slowBtnOn;
 	
 	//Solenoid Ports
 	public final static int shiftSolPortOn = 0;
@@ -69,7 +73,8 @@ public class Constants {
 	//Arm Motor Ports
 	public final static int leftArmMPort = 6;
 	public final static int rightArmMPort = 7;
-	public final static int pivotMPort = 0; //PWM channel Spark
+	public final static int pivotM1Port = 0; //PWM channel Spark
+	//public final static int pivotM2Port = 1;
 	
 	//Elevator Motor Ports
 	public final static int elevatorM1Port = 8;
@@ -93,6 +98,7 @@ public class Constants {
 	//limit Switches
 	public final static int upperLimitPort = 8;
 	public final static int lowerLimitPort = 9;
+	public final static int autoPivotLimitPort = 7;
 	
 	//Booleans
 	public static boolean autonBool;

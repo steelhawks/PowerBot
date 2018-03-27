@@ -26,15 +26,16 @@ public class ScaleSwitchLLLPos3 extends CommandGroup {
 		Robot.drivetrain.midLeftM.setExpiration(120);
 		Robot.drivetrain.frontRightM.setExpiration(120);
 		Robot.drivetrain.midRightM.setExpiration(120);
+		addSequential(new AutoPivot(35,false));
 		addSequential(new EncGyroPlease(13000,13000,1.0,true));//Forward towards switch
     	addSequential(new AutonWait(0.5));//Delay
 		addSequential(new ShiftGear());//Shift low to slow it down to turn
     	addSequential(new AutonTurn(88, true));//Turn right in low 88
     	addSequential(new EncGyroPlease(900,900,1.0,false));
-    	addSequential(new AutoPivot(25,false));
-    	addSequential(new AutoElevator(30000,true));//elevator up
-    	addSequential(new RollerOuttake(1.5,false));
-    	addSequential(new AutoElevator(30000,false));//elevator down
+    	addSequential(new AutoElevator(23500,true));//elevator up
+    	addSequential(new EncGyroPlease(150,150,0.3,true));
+    	addSequential(new RollerOuttake(0.75,true));
+    	addSequential(new AutoElevator(24200,false));//elevator down
     	addSequential(new EncGyroPlease(400,400,1.0,true));
     	addSequential(new AutonTurn(70, true));//Turn right the switch
     	/*addParallel(new EncGyroPlease(5500,5500,0.75,true));//Travel towards the switch
