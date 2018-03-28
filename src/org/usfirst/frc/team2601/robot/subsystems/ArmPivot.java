@@ -99,7 +99,7 @@ public class ArmPivot extends Subsystem {
     	double pivotPos = rotCounter.get();
     	double y = 0;
     	y = js.getRightY();	
-    	armPivotM1.set(y);
+    	//armPivotM1.set(y);
     	armPivotM.set(y);
     	SmartDashboard.putNumber("Hall", pivotPos);
     	SmartDashboard.putNumber("PivotEncPos", pivotEncPos);
