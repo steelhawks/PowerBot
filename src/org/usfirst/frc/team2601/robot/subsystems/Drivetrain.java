@@ -117,7 +117,8 @@ public class Drivetrain extends Subsystem implements PIDOutput {
 		SmartDashboard.putNumber("MidRightM Voltage", midRightM.getBusVoltage());
 		SmartDashboard.putNumber("IRValue", Robot.arms.cubeir.getValue());
 		boolean looseGrip;
-		if(Robot.arms.armSol.get() == DoubleSolenoid.Value.kForward) {
+		// ALPHAAAAAAAAAAA if(Robot.arms.armSol.get() == DoubleSolenoid.Value.kForward) {
+		if(Robot.arms.armSol.get() == DoubleSolenoid.Value.kReverse) {
 			looseGrip = true;
 		}else {
 			looseGrip = false;
@@ -221,6 +222,7 @@ public class Drivetrain extends Subsystem implements PIDOutput {
         	double gyroAngle = getGyroAngle();
         	if(forward == true) {
         		diffDrive.arcadeDrive(-speed, gyroAngle * kPGyro);
+    			Robot.arms.armSol.set(DoubleSolenoid.Value.kForward);
     			Robot.arms.rollerIntake(false);
     			if (-getLeftEncoderDist() > leftDist && getRightEncoderDist() > rightDist) {
     				constants.autonBool = true;

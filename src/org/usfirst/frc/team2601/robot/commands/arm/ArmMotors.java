@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class ArmMotors extends Command {
 
+	Constants constants = Constants.getInstance();
+	
     public ArmMotors() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.arms);
@@ -21,12 +23,12 @@ public class ArmMotors extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Robot.arms.armMotors(Constants.oJS);
+    	Robot.arms.armMotors(constants.gamepad);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return false;
     }
 
     // Called once after isFinished returns true

@@ -31,6 +31,7 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.CenterSwitchLPos2;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.CenterSwitchRPos2;
+import org.usfirst.frc.team2601.robot.commands.AutonCommands.CrossAutoLine;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos1;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos2;
 import org.usfirst.frc.team2601.robot.commands.AutonCommands.DoubleScaleLPos3;
@@ -52,12 +53,12 @@ import org.usfirst.frc.team2601.robot.commands.AutonCommands.ScaleSwitchRRRPos3;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.DiffDrive;
 import org.usfirst.frc.team2601.robot.subsystems.ArmPivot;
 import org.usfirst.frc.team2601.robot.subsystems.Arms;
-import org.usfirst.frc.team2601.robot.subsystems.BTMacroPlay;
-import org.usfirst.frc.team2601.robot.subsystems.BTMacroRecord;
 import org.usfirst.frc.team2601.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2601.robot.subsystems.Elevator;
-import org.usfirst.frc.team2601.robot.subsystems.Scaler;
 import org.usfirst.frc.team2601.robot.subsystems.Vision;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -73,26 +74,15 @@ public class Robot extends TimedRobot {
 	
 	public static final Drivetrain drivetrain = new Drivetrain();
 	public static final Arms arms = new Arms();
-	public static final Scaler scaler = new Scaler();
 	public static final Elevator elevator = new Elevator();
 	public static final ArmPivot pivot = new ArmPivot();
+	public static final Vision vision = new Vision();
 	public static OI m_oi = new OI();
-	public static Vision vision = new Vision();
 	Command m_autonomousCommand;
 	SendableChooser m_chooser = new SendableChooser();
 	public static Compressor compressor = new Compressor(0);
 	Thread visionThread;
 	
-	//BTMain
-	/*boolean isRecording = false;
-	//autoNumber defines an easy way to change the file you are recording to/playing from, in case you want to make a
-	//few different auto programs
-	static final int autoNumber = 10;
-	//autoFile is a global constant that keeps you from recording into a different file than the one you play from
-	public static final String autoFile = new String("/Desktop" + autoNumber + ".csv");
-	BTMacroPlay player;	
-	BTMacroRecord recorder;
-	*/
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -154,12 +144,14 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		//constants.robotPos = (int) SmartDashboard.getNumber("constants.robotPos",0);
+		constants.holdArmAngle = false;
 		Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
 		//320x240
 		String gameData;
 		Alliance currAlliance;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		currAlliance = DriverStation.getInstance().getAlliance();
+		//m_autonomousCommand = new CrossAutoLine();
 		
 		//All positions are the same from the perspectives of both alliances 
 		//Position one double scale autonomous
@@ -243,20 +235,7 @@ public class Robot extends TimedRobot {
 		}else {
 			//CrossAutoLine
 		}
-		
-    	//try to create a new player
-    	//if there is a file, great - you have a new non-null object "player"
-    	/*try 
-    	{
-    		player = new BTMacroPlay();
-		} 
     
-		//if not, print out an error
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}*/
-		
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.start();
 		}
@@ -269,39 +248,17 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		//compressor.start();
-		//as long as there is a file you found, then use the player to scan the .csv file
-		//and set the motor values to their specific motors
-		/*if (player != null)
-		{
-			player.play();
-		}
-		//do nothing if there is no file
-		//if there is a player and you've disabled autonomous, then flush the rest of the values
-				//and stop reading the file
-		if(player!= null)
-			{
-				player.end();
-			}*/
+		
+		
 	}
 
 	@Override
 	public void teleopInit() {
-		Robot.arms.armSol.set(DoubleSolenoid.Value.kForward);
+		Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		 /*try {
-				recorder = new BTMacroRecord();
-				
-			} 
-			catch (IOException e) 
-			{
-				System.out.println("fail");
-				e.printStackTrace();
-			}*/
-			
 		
     	if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
@@ -314,50 +271,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-       //the statement in this "if" checks if a button you designate as your record button 
-		//has been pressed, and stores the fact that it has been pressed in a variable
-		
-		/*if (Robot.m_oi.djs.getRawButton(11))
-		{
-			isRecording = !isRecording;
-			System.out.println("record");
-		}  
-		//if our record button has been pressed, lets start recording!
-		if (isRecording)
-		{
-			try
-			{
-				//if we succesfully have made the recorder object, lets start recording stuff
-				//2220 uses a storage object that we can get motors values, etc. from.
-				//if you don't need to pass an object like that in, modify the methods/classes
-				if(recorder != null)
-				{
-					recorder.record();
-				}
-			
-			}
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-		}
-	
-	
-	//once we're done recording, the last thing we'll do is clean up the recording using the end
-	//function. more info on the end function is in the record class
-	try 
-	{
-		if(recorder != null)
-		{
-			recorder.end();
-		}
-	} 
-	catch (IOException e) 
-	{
-		e.printStackTrace();
-	}*/
-	
-	}
+    }
 
 	/**
 	 * This function is called periodically during test mode.

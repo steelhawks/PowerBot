@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2601.robot.subsystems;
 
 import org.usfirst.frc.team2601.robot.Constants;
+import org.usfirst.frc.team2601.robot.F310;
 import org.usfirst.frc.team2601.robot.Robot;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmMotors;
 
@@ -36,17 +37,21 @@ public class Arms extends Subsystem {
     		armSol.set(DoubleSolenoid.Value.kForward);
     	}
     }
+    public void heldOpen() {
+    	armSol.set(DoubleSolenoid.Value.kReverse);
+    }
     //Method for using the motors through a joystick
-    public void armMotors(Joystick js) {
+    public void armMotors(F310 js) {
     	double rot = 0;
     	if(constants.autonBot == false) {
-        	rot = js.getTwist();
-	    	leftArmM.set(rot);
-	    	rightArmM.set(-rot);
-	    	//SmartDashboard.putNumber("IRValue", cubeir.getValue());
+    		if(js.getLeftTrigger() > 0) {
+    			leftArmM.set(-0.5);
+    			rightArmM.set(0.5);
+    		}
+        	//SmartDashboard.putNumber("IRValue", cubeir.getValue());
         }
 	}
-    //Method for using the arm intake pistons
+    //Method for using the arm intake pistons *****KFORWARD == Closed KREVERSE == Open
     public void armIntakePistons() {
     	if(armSol.get() == DoubleSolenoid.Value.kForward) {
     		armSol.set(DoubleSolenoid.Value.kReverse);
@@ -55,7 +60,8 @@ public class Arms extends Subsystem {
     	}
     }
     public void armIntakeButton(){
-    	if(leftArmM.get() == 0 && rightArmM.get() == 0){
+    	if(leftArmM.get() == 0 && rightArmM.get() == 0) { //&& isCubeIn() == false){
+    		//armSol.set(DoubleSolenoid.Value.kReverse);
     		leftArmM.set(0.75);
     		rightArmM.set(-0.75);
     	}else{
@@ -64,7 +70,7 @@ public class Arms extends Subsystem {
     	}
     }
     public void armShootButton() {
-    	armSol.set(DoubleSolenoid.Value.kForward);
+    	//armSol.set(DoubleSolenoid.Value.kForward);
     	if(leftArmM.get() == 0 && rightArmM.get() == 0){
     		leftArmM.set(-0.75);
     		rightArmM.set(0.75);
@@ -79,10 +85,9 @@ public class Arms extends Subsystem {
     }
     public void rollerOuttake(boolean fast) {
     	//armIntakePistons();
-		armSol.set(DoubleSolenoid.Value.kForward);
-    	if(fast == false) {
-	    	leftArmM.set(-0.7);
-	    	rightArmM.set(0.7);
+		if(fast == false) {
+	    	leftArmM.set(-0.65);
+	    	rightArmM.set(0.65);
     	}else {
     		leftArmM.set(-1.0);
 	    	rightArmM.set(1.0);

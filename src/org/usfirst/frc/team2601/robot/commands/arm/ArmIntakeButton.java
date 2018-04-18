@@ -31,11 +31,10 @@ public class ArmIntakeButton extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	if(Robot.arms.cubeir.getValue() > 1400) {
+    	if(Robot.arms.cubeir.getValue() > 1300) {
     		Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
 		}
     }
-
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {

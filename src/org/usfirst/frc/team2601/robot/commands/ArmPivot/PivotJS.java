@@ -27,13 +27,14 @@ public class PivotJS extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(constants.operatorType == Operator_Type.Joystick) {
+    	/*if(constants.operatorType == Operator_Type.Joystick) {
     		Robot.pivot.armPivotJS(oi.pivotJS);
     	}else if (constants.operatorType == Operator_Type.Gamepad) {
     		Robot.pivot.armPivotGamepad(constants.gamepad);
     	}else {
     		Robot.pivot.armPivotBB(constants.BB);
-    	}
+    	}*/
+    	Robot.pivot.armPivotGamepad(constants.gamepad);
     }
 
     // Make this return true when this Command no longer needs to run execute()

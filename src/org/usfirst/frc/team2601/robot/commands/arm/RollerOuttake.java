@@ -22,7 +22,7 @@ public class RollerOuttake extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.arms.slowIntake = false;
-		Robot.arms.armSol.set(DoubleSolenoid.Value.kForward);
+		Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
     }
 
     // Called repeatedly when this Command is scheduled to run

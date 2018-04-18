@@ -49,6 +49,9 @@ public class F310 extends Joystick{
     public double getRightX(){
     	return super.getRawAxis(kGamepadAxisRightStickX);
     }
+    public double getLeftTrigger() {
+    	return super.getRawAxis(2);
+    }
     
     public double getRightY(){
     	return super.getRawAxis(kGamepadAxisRightStickY);

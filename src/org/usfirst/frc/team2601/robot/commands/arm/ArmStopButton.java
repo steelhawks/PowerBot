@@ -2,6 +2,7 @@ package org.usfirst.frc.team2601.robot.commands.arm;
 
 import org.usfirst.frc.team2601.robot.Robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -30,6 +31,9 @@ public class ArmStopButton extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	if(Robot.arms.cubeir.getValue() > 1300) {
+    		Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
+		}
     }
 
     // Called when another command which requires one or more of the same

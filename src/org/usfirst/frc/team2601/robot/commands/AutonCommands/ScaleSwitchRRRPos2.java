@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2601.robot.commands.AutonCommands;
 
+import org.usfirst.frc.team2601.robot.commands.Align;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**

@@ -3,6 +3,7 @@ package org.usfirst.frc.team2601.robot.commands;
 import org.usfirst.frc.team2601.robot.Constants;
 import org.usfirst.frc.team2601.robot.Robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -54,6 +55,7 @@ Constants constants = Constants.getInstance();
     protected void end() {
     	Robot.drivetrain.stopMotors();
     	Robot.arms.stopMotors();
+    	Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
     }
 
     // Called when another command which requires one or more of the same

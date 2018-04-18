@@ -8,20 +8,20 @@
 package org.usfirst.frc.team2601.robot;
 
 import org.usfirst.frc.team2601.robot.Constants.Operator_Type;
-import org.usfirst.frc.team2601.robot.commands.MoveArmPivotShoot;
-import org.usfirst.frc.team2601.robot.commands.MoveArmPivotUp;
-import org.usfirst.frc.team2601.robot.commands.ArmPivot.ArmPivotCommand;
+import org.usfirst.frc.team2601.robot.commands.Align;
+import org.usfirst.frc.team2601.robot.commands.AutoAlignIntake;
+import org.usfirst.frc.team2601.robot.commands.ResetTableVal;
+import org.usfirst.frc.team2601.robot.commands.ArmPivot.Test;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmIntakeButton;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmPiston;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmShootButton;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmStopButton;
+import org.usfirst.frc.team2601.robot.commands.arm.HoldOpenBtn;
 import org.usfirst.frc.team2601.robot.commands.drivetrain.ShiftGear;
 import org.usfirst.frc.team2601.robot.commands.elevator.ElDown;
 import org.usfirst.frc.team2601.robot.commands.elevator.ElUp;
 import org.usfirst.frc.team2601.robot.commands.elevator.ElevatorJS;
 import org.usfirst.frc.team2601.robot.commands.elevator.StopElM;
-import org.usfirst.frc.team2601.robot.commands.scaler.ScalerButton;
-import org.usfirst.frc.team2601.robot.commands.scaler.ScalerButtonStop;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -54,16 +54,17 @@ public class OI {
 		Button shift = new JoystickButton(djs, constants.shiftB);
 		shift.whenPressed(new ShiftGear());
 		
+		Button align = new JoystickButton(djs, constants.alignB);
+		//align.whenPressed(new AutoAlignIntake());
+		
+		Button resetNetworkTableVal = new JoystickButton(djs, 7);
+		resetNetworkTableVal.whenPressed(new ResetTableVal());		
+		
+		Button testPID = new JoystickButton(placeholder,8);
+		//testPID.whenPressed(new Test());
+		
 		//Buttons for Operator
 		if (constants.autonBot == false) {
-			//Button scaler = new JoystickButton(placeholder, constants.scalerB);
-			//scaler.whenActive(new ScalerButton());
-			//scaler.whenInactive(new ScalerButtonStop());
-			
-			/*Button elUp = new JoystickButton(placeholder, 4);
-			elUp.whenPressed(new ElUp());
-			elUp.whenInactive(new StopElM());
-			*/
 			Button elDown = new JoystickButton(placeholder, 1);
 			constants.slowBtnOn = false;
 			if(constants.slowBtnOn == true) {
@@ -71,13 +72,9 @@ public class OI {
 				elDown.whenInactive(new StopElM());
 			}
 			Button armPiston = new JoystickButton(placeholder, constants.armPistonB);
-			armPiston.whenPressed(new ArmPiston());
+			//armPiston.whenPressed(new ArmPiston());
+			armPiston.whileHeld(new HoldOpenBtn());;
 			
-			Button armPivotShoot = new JoystickButton(placeholder, constants.armPivotDownB);
-			armPivotShoot.whenPressed(new MoveArmPivotShoot());
-			
-			Button armPivotUp = new JoystickButton(placeholder, constants.armPivotUpB);
-			armPivotUp.whenPressed(new MoveArmPivotUp());
 			if(constants.operatorType == Operator_Type.Joystick) {
 				Button armIntake = new JoystickButton(constants.oJS, constants.armIntakeB);
 				armIntake.whenActive(new ArmIntakeButton());

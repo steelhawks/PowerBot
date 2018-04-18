@@ -36,7 +36,6 @@ public class RollerIntake extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
     	Robot.arms.stopMotors();
     }
 

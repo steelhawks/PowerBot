@@ -27,6 +27,7 @@ public class AutoPivot extends Command {
     	//Robot.pivot.rotCounter.reset();
     	//Robot.pivot.pivotEnc.reset();
     	Robot.pivot.armPivotM.getSensorCollection().setQuadraturePosition(0,0);
+    	constants.holdArmAngle = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -42,11 +43,13 @@ public class AutoPivot extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.pivot.stopPivotMotors();
+		Robot.pivot.stopPivotMotors();
+    	//constants.holdArmAngle = true;
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	constants.holdArmAngle = false;
     }
 }

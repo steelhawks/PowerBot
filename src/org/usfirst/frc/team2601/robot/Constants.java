@@ -11,7 +11,6 @@ public class Constants {
 		}
 		return instance;
 	}
-	//MUST TEST INTAKE AUTON AT COMP
 	
 	public enum Operator_Type {Joystick, BB, Gamepad};
 	public Operator_Type operatorType = Operator_Type.Gamepad;
@@ -26,6 +25,7 @@ public class Constants {
 	//Autonomous Boolean f
 	public final static boolean doubleScale = false;
 	public final static boolean onlySwitch = true;
+	public static boolean holdArmAngle = false;
 	
 	//Left Drivetrain Motor Ports
 	public final static int frontRightMPort = 0;//3 originally
@@ -48,9 +48,9 @@ public class Constants {
 	
 	//Driver Joystick Button
 	public final static int shiftB = 1; 
+	public final static int alignB = 2;
 	
 	//Operator Joystick Buttons
-	//public static int scalerB = 11;
 	public static boolean armUp;
 	public static int armPivotDownB = 7;
 	public static int armPivotUpB = 8;
@@ -98,7 +98,8 @@ public class Constants {
 	//limit Switches
 	public final static int upperLimitPort = 8;
 	public final static int lowerLimitPort = 9;
-	public final static int autoPivotLimitPort = 7;
+	public final static int lowerPivotLimitPort = 5;
+	public final static int upperPivotLimitPort = 6;
 	
 	//Booleans
 	public static boolean autonBool;

@@ -78,7 +78,7 @@ public class Elevator extends Subsystem {
     			//elevatorM4.set(0.75);
     			//elevatorJSGroup1.set(-0.5);
     	    	//elevatorJSGroup2.set(0.5);
-    			elevatorGroup.set(0.5);
+    			elevatorGroup.set(0.65);
     	    	if (elevatorPos > pos) {
     				constants.autonEl = true;
     			}
@@ -124,11 +124,9 @@ public class Elevator extends Subsystem {
     		}else {
     			y = js.getLeftY();
     		}
-	    	//y = js.getLeftY();
     		
-	    	//elevatorM4.set(y);
     		elevatorGroup.set(y);
-    	    if(lowerLimit.get() == true) {
+    	    if(lowerLimit.get() == false) {
 	    		elevatorM4.getSensorCollection().setQuadraturePosition(0,0);
     		}
 		    SmartDashboard.putNumber("TalonEnc" , elevatorPos);
