@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class AutoPivot extends Command {
+public class AutoPIDPivot extends Command {
 
 	Constants constants = Constants.getInstance();
 	double setPos;
 	boolean setDir;//up == true
 	
-    public AutoPivot(double pos, boolean up) {
+    public AutoPIDPivot(double pos, boolean up) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.pivot);
@@ -34,8 +34,7 @@ public class AutoPivot extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.pivot.autoPivot(setPos, setDir);
-    	//Robot.pivot.ghettoAutoPivot(setPos, setDir);
+    	Robot.pivot.usePID(setPos, setDir);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -45,9 +44,10 @@ public class AutoPivot extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-		Robot.pivot.stopPivotMotors();
+		//Robot.pivot.stopPivotMotors();
     	//constants.holdArmAngle = true;
     	//constants.PIDVal = true;
+    	Robot.pivot.usePID(setPos, setDir);
     }
 
     // Called when another command which requires one or more of the same

@@ -37,6 +37,26 @@ public class ScaleSwitchLLLPos1 extends CommandGroup {
 			Robot.drivetrain.midLeftM.setExpiration(120);
 			Robot.drivetrain.frontRightM.setExpiration(120);
 			Robot.drivetrain.midRightM.setExpiration(120);
+			addSequential(new EncGyroPlease(11500,11500,1.0,true));//Forward towards the null territory 
+	    	addSequential(new AutonWait(0.05));//Delay
+	    	addParallel(new AutoPivot(950,false));//Pivot the arms down
+	    	addSequential(new ShiftGear());//Shift low to slow it down to turn
+	    	addSequential(new AutoElevator(25500,true));//Raise the elevator
+	    	addSequential(new AutonTurn(45, false));//Turn right in low 88
+	    	addSequential(new EncGyroPlease(700,700,0.5,true));
+	    	addSequential(new RollerOuttake(0.15,false));
+	    	addParallel(new AutoLimitElevator(23500,false));
+	    	addSequential(new AutonTurn(90,false));
+	    	addSequential(new AutoAlignIntake());
+	    	addSequential(new EncGyroPlease(400,400,0.75,true));
+	    	addSequential(new RollerOuttake(0.15,true));
+	    	/*
+			addSequential(new EncGyroPlease(2000,2000,1.0,false));
+			addSequential(new AutoElevator(26500,true));
+			addSequential(new AutonTurn(90,true));
+			addSequential(new RollerOuttake(0.15,false));
+	    	 */
+	    	/*
 			addSequential(new EncGyroPlease(13000,13000,1.0,true));//Forward towards the null territory 
 	    	addSequential(new AutonWait(0.05));//Delay
 	    	addSequential(new ShiftGear());//Shift low to slow it down to turn
@@ -56,7 +76,7 @@ public class ScaleSwitchLLLPos1 extends CommandGroup {
 	    	addSequential(new AutoAlignIntake());//Align to the cube, pick it up, raise elevator
 	    	
 	    	addSequential(new EncGyroPlease(400,400,1.0,true));//Go towards the switch
-	    	addSequential(new RollerOuttake(1.0,false));//Outtake the switch
+	    	addSequential(new RollerOuttake(1.0,false));//Outtake the switch*/
 	    //Beta Code
     	}else {
 	    	Robot.drivetrain.frontLeftM.setSafetyEnabled(false);

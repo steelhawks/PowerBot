@@ -28,6 +28,28 @@ public class ScaleSwitchRRRPos3 extends CommandGroup {
 		Robot.drivetrain.midLeftM.setExpiration(120);
 		Robot.drivetrain.frontRightM.setExpiration(120);
 		Robot.drivetrain.midRightM.setExpiration(120);
+		addSequential(new EncGyroPlease(11500,11500,1.0,true));//Forward towards the null territory 
+    	addSequential(new AutonWait(0.05));//Delay
+    	addParallel(new AutoPivot(950,false));//Pivot the arms down
+    	addSequential(new ShiftGear());//Shift low to slow it down to turn
+    	addSequential(new AutoElevator(25500,true));//Raise the elevator
+    	addSequential(new AutonTurn(45, true));//Turn right in low 88
+    	addSequential(new EncGyroPlease(700,700,0.5,true));
+    	addSequential(new RollerOuttake(0.15,false));
+    	addParallel(new AutoLimitElevator(23500,false));
+    	addSequential(new AutonTurn(90,true));
+    	addSequential(new AutoAlignIntake());
+    	addSequential(new EncGyroPlease(400,400,0.75,true));
+    	addSequential(new RollerOuttake(0.15,true));
+    	
+    	/*Robot.drivetrain.frontLeftM.setSafetyEnabled(false);
+		Robot.drivetrain.midLeftM.setSafetyEnabled(false);
+		Robot.drivetrain.frontRightM.setSafetyEnabled(false);
+		Robot.drivetrain.midRightM.setSafetyEnabled(false);
+		Robot.drivetrain.frontLeftM.setExpiration(120);
+		Robot.drivetrain.midLeftM.setExpiration(120);
+		Robot.drivetrain.frontRightM.setExpiration(120);
+		Robot.drivetrain.midRightM.setExpiration(120);
 		addSequential(new EncGyroPlease(13000,13000,1.0,true));//Forward towards scale
     	addSequential(new AutonWait(0.05));//Delay
     	addSequential(new ShiftGear());//Shift low to slow it down to turn
@@ -47,5 +69,6 @@ public class ScaleSwitchRRRPos3 extends CommandGroup {
     	
     	addSequential(new EncGyroPlease(400,400,1.0,true));//Go forwards
     	addSequential(new RollerOuttake(1.0,false));//Shoot the cube 
+    	*/
     }
 }

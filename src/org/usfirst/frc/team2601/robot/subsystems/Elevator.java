@@ -67,7 +67,32 @@ public class Elevator extends Subsystem {
     			//elevatorJSGroup1.set(0.5);
     	    	//elevatorJSGroup2.set(-0.5);
     			//elevatorM4.set(-0.75);
-    			elevatorGroup.set(-0.75);
+    			elevatorGroup.set(-1.0);
+        		if (-elevatorPos > pos) {
+					constants.autonEl = true;
+				}
+				if (-elevatorPos <= pos) {
+					constants.autonEl = false;
+				}
+    		}else if (up == false){
+    			elevatorGroup.set(0.65);
+    	    	if (elevatorPos > pos) {
+    				constants.autonEl = true;
+    			}
+    			if (elevatorPos <= pos) {
+    				constants.autonEl = false;
+    			}	
+    		}
+    	}
+    }
+    public void autoScaleElevator(double pos, boolean up) {
+    	double elevatorPos = elevatorM4.getSensorCollection().getQuadraturePosition();
+    	if(constants.autonBot == false) {
+    		if(up == true) {
+    			//elevatorJSGroup1.set(0.5);
+    	    	//elevatorJSGroup2.set(-0.5);
+    			//elevatorM4.set(-0.75);
+    			elevatorGroup.set(-0.65);//up speed
         		if (-elevatorPos > pos) {
 					constants.autonEl = true;
 				}

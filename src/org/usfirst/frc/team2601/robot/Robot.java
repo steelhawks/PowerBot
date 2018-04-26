@@ -143,6 +143,20 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		/*Robot.pivot.armPivotM.getSensorCollection().setQuadraturePosition(0, 0);
+		Robot.pivot.armPivotM.setInverted(true);
+		//Robot.pivot.armPivotM.setSensorPhase(true);
+		Robot.pivot.armPivotM.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    	Robot.pivot.armPivotM.config_kF(0, 0, 0);
+		Robot.pivot.armPivotM.config_kP(0, 4, 0);//32
+		Robot.pivot.armPivotM.config_kI(0, 0.003125, 0);
+		Robot.pivot.armPivotM.config_kD(0, 0.0002, 0);
+		Robot.pivot.armPivotM.setSafetyEnabled(false);
+		double newPos = Robot.pivot.armPivotM.getSelectedSensorPosition(0);
+		Robot.pivot.armPivotM.set(ControlMode.Position, newPos);//(ControlMode.Position, newPos);
+		*/
+		
+		Robot.pivot.armPivotM.set(ControlMode.PercentOutput,0);
 		//constants.robotPos = (int) SmartDashboard.getNumber("constants.robotPos",0);
 		constants.holdArmAngle = false;
 		Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
@@ -248,13 +262,13 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		
-		
 	}
 
 	@Override
 	public void teleopInit() {
-		Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
+		/*Robot.pivot.armPivotM.setInverted(false);
+		Robot.pivot.armPivotM.setSensorPhase(false);
+		*/Robot.arms.armSol.set(DoubleSolenoid.Value.kReverse);
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove

@@ -11,7 +11,6 @@ import org.usfirst.frc.team2601.robot.Constants.Operator_Type;
 import org.usfirst.frc.team2601.robot.commands.Align;
 import org.usfirst.frc.team2601.robot.commands.AutoAlignIntake;
 import org.usfirst.frc.team2601.robot.commands.ResetTableVal;
-import org.usfirst.frc.team2601.robot.commands.ArmPivot.Test;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmIntakeButton;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmPiston;
 import org.usfirst.frc.team2601.robot.commands.arm.ArmShootButton;
@@ -72,8 +71,8 @@ public class OI {
 				elDown.whenInactive(new StopElM());
 			}
 			Button armPiston = new JoystickButton(placeholder, constants.armPistonB);
-			//armPiston.whenPressed(new ArmPiston());
-			armPiston.whileHeld(new HoldOpenBtn());;
+			armPiston.whenPressed(new ArmPiston());
+			//armPiston.whileHeld(new HoldOpenBtn());;
 			
 			if(constants.operatorType == Operator_Type.Joystick) {
 				Button armIntake = new JoystickButton(constants.oJS, constants.armIntakeB);

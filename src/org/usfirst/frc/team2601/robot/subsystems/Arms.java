@@ -84,8 +84,7 @@ public class Arms extends Subsystem {
     	rightArmM.set(0);
     }
     public void rollerOuttake(boolean fast) {
-    	//armIntakePistons();
-		if(fast == false) {
+    	if(fast == false) {
 	    	leftArmM.set(-0.65);
 	    	rightArmM.set(0.65);
     	}else {

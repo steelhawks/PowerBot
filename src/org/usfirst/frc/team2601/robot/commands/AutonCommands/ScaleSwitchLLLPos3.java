@@ -31,15 +31,17 @@ public class ScaleSwitchLLLPos3 extends CommandGroup {
 		addSequential(new EncGyroPlease(9550,9550,1.0,true));//Forward towards switch
     	addSequential(new AutonWait(0.1));//Delay
 		addSequential(new ShiftGear());//Shift low to slow it down to turn
-    	addSequential(new AutonTurn(88, true));//Turn left in low 88
+    	addSequential(new AutonWait(0.1));//Delay
+		addSequential(new AutonTurn(88, true));//Turn left in low 88
     	addSequential(new ShiftGear());//Shift to high gear
     	addSequential(new EncGyroPlease(7850,7850,1.0,true));//Drive across the field
     	addSequential(new AutonWait(0.1));//Delay
     	addSequential(new ShiftGear());//Shift to turn
+    	addSequential(new AutonWait(0.1));//Delay
     	addSequential(new AutonTurn(85, false));//Turn right in low 88
     	addSequential(new EncGyroPlease(975,975,1.0,true));//Go forwards towards the scale
 		addParallel(new AutoPivot(950,false));//Lower the arms
-    	addSequential(new AutoElevator(28000,true));//Raise the elevator
+    	addSequential(new AutoElevator(25500,true));//Raise the elevator
     	addSequential(new RollerOuttake(0.15,true));//Shoot the cube
 		addParallel(new AutoLimitElevator(7000,false));//Lower the elevator
     	addSequential(new EncGyroPlease(500,500,1.0,false));//Move back

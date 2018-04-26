@@ -12,13 +12,14 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutoAlignIntake extends CommandGroup {
 
     public AutoAlignIntake() {
-    	addSequential(new Align());
-    	addSequential(new AutonWait(0.2));
-    	addSequential(new IntakeForward(500, 500, 0.75, true));
+    	//addSequential(new Align());
+    	//addSequential(new useAlignVals());
+    	//addSequential(new AutonWait(0.2));
+    	addSequential(new IntakeForward(500, 500, 0.85, true));
+    	addSequential(new RollerIntake(0.1,true));
     	addSequential(new AutonWait(0.1));
-    	addParallel(new EncGyroPlease(400,400,0.75,false));
-    	addParallel(new AutoElevator(8000,true));
-    	addSequential(new RollerIntake(0.85,false));
+    	//addParallel(new EncGyroPlease(400,400,0.75,false));
+    	addSequential(new AutoElevator(8000,true));
     	
     }
 }

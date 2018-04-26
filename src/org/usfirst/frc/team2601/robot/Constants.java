@@ -18,7 +18,7 @@ public class Constants {
 	public Robot_Type robotType = Robot_Type.Alpha;
 	//Robot Type Boolean (Alpha and Beta = false | AutonBot and TestBoard = true)
 	public final static boolean autonBot = false;
-	
+
 	//Robot Position For Autonomous
 	public final static int robotPos = 2;
 		
@@ -50,6 +50,9 @@ public class Constants {
 	public final static int shiftB = 1; 
 	public final static int alignB = 2;
 	
+	//PID Pivot Value
+	public static boolean PIDVal;
+	
 	//Operator Joystick Buttons
 	public static boolean armUp;
 	public static int armPivotDownB = 7;
@@ -63,6 +66,10 @@ public class Constants {
 	public static int armPivotUpBB = 4;
 	
 	public static boolean slowBtnOn;
+	
+	//vision values
+	public static double xPos;
+	public static double angle;
 	
 	//Solenoid Ports
 	public final static int shiftSolPortOn = 0;

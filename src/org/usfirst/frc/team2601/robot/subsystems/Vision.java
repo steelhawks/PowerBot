@@ -99,6 +99,7 @@ public class Vision extends Subsystem {
     	*/
     	double xPos = 0.0;
     	double distance = 0.0;
+    	double angle = 0.0;
     	int alignThreshold = 55;
     	boolean adjustmentRequired = Boolean.FALSE;
     	
@@ -109,18 +110,22 @@ public class Vision extends Subsystem {
 			// if X position > 160 then we need to turn RIGHT
 			// if X position < 160 we need to turn LEFT
 			xPos = tableData.getEntry(NETWORK_TABLE_X_POSITION).getDouble(0.0);
-			
+			angle = tableData.getEntry(NETWORK_TABLE_ANGLE).getDouble(0.0);
 			distance = tableData.getEntry(NETWORK_TABLE_DISTANCE).getDouble(0.0);
 			// diffX is the offset from the centerline 
 			double diffX = Math.abs(160 - xPos);
 			System.out.println(distance);
+			System.out.println(angle);
 			if(distance < 120) {
 				alignThreshold = 80;
 			} 
 			else {
 				alignThreshold = 55;
 			}
-			System.out.println(alignThreshold);
+			constants.xPos = xPos;
+			constants.angle = angle;
+			System.out.println(alignThreshold);			
+			/*
 			if(xPos < 157.5 && diffX > alignThreshold) {
 				System.out.println(xPos + " FAR LEFT");
 				Robot.drivetrain.leftGroup.set(0.28);
@@ -148,13 +153,9 @@ public class Vision extends Subsystem {
 				System.out.println(xPos + "ALIGNED");
 				Robot.drivetrain.leftGroup.set(0);
 				Robot.drivetrain.rightGroup.set(0);
-				/*System.out.println("Starting pickup");
-				System.out.println("Finished pickup");*/
-		    	align = true;
-			}
-				
-		}
-		catch(ArrayIndexOutOfBoundsException exp){
+				align = true;
+			}*/
+		}catch(ArrayIndexOutOfBoundsException exp){
 			System.out.println("No values being published");
 		}
 			
@@ -164,5 +165,22 @@ public class Vision extends Subsystem {
     	tableData.getEntry(NETWORK_TABLE_X_POSITION).delete();
     	tableData.getEntry(NETWORK_TABLE_DISTANCE).delete();
     	tableData.getEntry(NETWORK_TABLE_ANGLE).delete();
+    }
+    public void moveToAngle(double xPos, double angle) {
+    	if(Robot.drivetrain.gyro.getAngle() <= angle && xPos < 157.5) {
+			System.out.println("TurnLeft");
+			Robot.drivetrain.leftGroup.set(0.28);
+			Robot.drivetrain.rightGroup.set(0.28);
+			align = false;
+		}else if(Robot.drivetrain.gyro.getAngle() <= angle &&  xPos > 162.5) {
+			System.out.println("TurnRight");
+			Robot.drivetrain.leftGroup.set(-0.28);
+			Robot.drivetrain.rightGroup.set(-0.28);
+			align = false;
+		}else {
+			Robot.drivetrain.leftGroup.set(0);
+			Robot.drivetrain.rightGroup.set(0);
+			align = true;
+		}
     }
 }

@@ -3,6 +3,7 @@ package org.usfirst.frc.team2601.robot.subsystems;
 import org.usfirst.frc.team2601.robot.ButtonBoard;
 import org.usfirst.frc.team2601.robot.Constants;
 import org.usfirst.frc.team2601.robot.F310;
+import org.usfirst.frc.team2601.robot.Robot;
 import org.usfirst.frc.team2601.robot.commands.ArmPivot.PivotJS;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -29,7 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 
-public class ArmPivot extends PIDSubsystem {
+public class ArmPivot extends Subsystem {
 	Constants constants = Constants.getInstance();
 	public WPI_TalonSRX armPivotM = new WPI_TalonSRX(constants.pivotMPort);
 	
@@ -39,11 +40,9 @@ public class ArmPivot extends PIDSubsystem {
 	private PIDController controller;
 	private double rampBand;
 	public ArmPivot() {
-		super("ArmPivot", 2.0, 0.0, 0.0);
-		setAbsoluteTolerance(0.05);
-		getPIDController().setContinuous(false);
 		constants.up = true;
 		armPivotM.getSensorCollection().setQuadraturePosition(0,0);
+		
 		/*	
 	 	armPivotM.set(ControlMode.Position, 0); 
 		armPivotM.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0,0);
@@ -130,10 +129,26 @@ public class ArmPivot extends PIDSubsystem {
     public void stopPivotMotors() {
     	armPivotM.set(0);
     }
-	protected double returnPIDInput() {
-		return armPivotM.getSensorCollection().getQuadraturePosition();
+	public void usePID(double pos, boolean up) {
+		double pivotEncPos = armPivotM.getSensorCollection().getQuadraturePosition();
+		if(up == true) {
+			Robot.pivot.armPivotM.setInverted(true);
+			Robot.pivot.armPivotM.set(ControlMode.Position, pos);//(ControlMode.Position, newPos);
+			if (pivotEncPos > pos) {
+				constants.autonArm = true;
+			}
+			if (pivotEncPos <= pos) {
+				constants.autonArm = false;
+			}
+		}else {
+			Robot.pivot.armPivotM.setInverted(false);
+			Robot.pivot.armPivotM.set(ControlMode.Position, pos);//(ControlMode.Position, newPos);
+			if (-pivotEncPos > pos) {
+				constants.autonArm = true;
+			}
+			if (-pivotEncPos <= pos) {//1000
+				constants.autonArm = false;
+			}
+		}
 	}
-	public void usePIDOutput(double output) {
-		armPivotM.pidWrite(output);
-	}    
 }

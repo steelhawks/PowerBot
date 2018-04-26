@@ -46,7 +46,7 @@ public class ScaleSwitchRRRPos1 extends CommandGroup {
 	    	addSequential(new AutonTurn(85, true));//Turn left in low 88
 	    	addSequential(new EncGyroPlease(975,975,1.0,true));//Go towards the scale
     		addParallel(new AutoPivot(950,false));//Pivot arms down a little 
-	    	addSequential(new AutoElevator(28000,true));//Raise the elevator
+	    	addSequential(new AutoElevator(25500,true));//Raise the elevator
 	    	addSequential(new RollerOuttake(0.15,true));//Shoot the cube
 			addParallel(new AutoLimitElevator(7000,false));//Lower the elevator
 	    	addSequential(new EncGyroPlease(500,500,1.0,false));//Go backwards
@@ -54,6 +54,7 @@ public class ScaleSwitchRRRPos1 extends CommandGroup {
 	    	addSequential(new AutonTurn(180, false));//Turn towards the switch
 	    	addSequential(new EncGyroPlease(800,800,1.0,true));//Go towards the switch
 	    	addSequential(new AutoAlignIntake());//Align, intake, raise
+	    	addSequential(new EncGyroPlease(400,400,0.75,true));
 	    	addSequential(new RollerOuttake(0.2,false));//Shoot out the cube 
 	    //Beta Code
 	    }else {
